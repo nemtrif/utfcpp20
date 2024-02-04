@@ -13,3 +13,4 @@
 //    limitations under the License.
 
 #include "utfcpp20.hpp"
+#include "ftest.h"

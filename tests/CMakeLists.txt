@@ -23,6 +23,11 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(ftest)
 
 include(CTest)
+add_library (ftest INTERFACE)
+target_include_directories(ftest INTERFACE ${ftest_SOURCE_DIR})
+
 add_executable(utfcpp20test utfcpp20.test.cpp)
+target_link_libraries(utfcpp20test PRIVATE utfcpp20)
 target_link_libraries(utfcpp20test PRIVATE ftest)
+
 add_test(NAME utfcpp20test COMMAND utfcpp20test)
