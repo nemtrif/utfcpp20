@@ -12,12 +12,24 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-#include "utfcpp20.hpp"
+#include "core.hpp"
 
-namespace utfcpp20 {
-
-
-    std::u16string utf8_to_16(std::string_view utf8_string) {
-        return u"";
+namespace utfcpp::internal
+{
+    bool is_utf8_trail(char ch) {
+        return (static_cast<unsigned char>(ch) > 0x7fu);
     }
-} // namespace utfcpp20
+
+    bool is_utf16_lead_surrogate(char16_t cp) {
+        return (cp >= LEAD_SURROGATE_MIN && cp <= LEAD_SURROGATE_MAX);
+    }
+
+    bool is_utf16_trail_surrogate(char16_t cp) {
+        return (cp >= TRAIL_SURROGATE_MIN && cp <= TRAIL_SURROGATE_MAX);
+    }
+
+    bool is_utf16_surrogate(char16_t cp) {
+        return (cp >= LEAD_SURROGATE_MIN && cp <= TRAIL_SURROGATE_MAX);
+    }
+
+} // namespace utfcpp::internal

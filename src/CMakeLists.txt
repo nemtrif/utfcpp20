@@ -14,7 +14,12 @@
 
 file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${utfcpp20_SOURCE_DIR}/include/*.hpp")
 
-add_library(utfcpp20 utfcpp20.cpp ${HEADER_LIST})
+set (src_files
+    core.hpp
+    core.cpp
+)
+
+add_library(utfcpp20 ${src_files} ${HEADER_LIST})
 
 target_include_directories(utfcpp20 PUBLIC ../include)
 
@@ -23,3 +28,8 @@ set_target_properties(utfcpp20 PROPERTIES
     CXX_STANDARD_REQUIRED YES
     CXX_EXTENSIONS NO
 )
+
+target_compile_options(utfcpp20 PUBLIC
+  $<$<CXX_COMPILER_ID:MSVC>:/W4>
+  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Wconversion>)
+

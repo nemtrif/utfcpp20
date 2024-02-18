@@ -15,8 +15,10 @@
 #ifndef uftcpp20_H_de558932_1371_4b17_a2e1_ceaad0fcb1cd
 #define uftcpp20_H_de558932_1371_4b17_a2e1_ceaad0fcb1cd
 
-namespace utfcpp20 {
+#include <string>
 
+namespace utfcpp20 {
+    std::u16string utf8_to_16(std::string_view utf8_string);
 } // namespace utfcpp20
 
 #endif // uftcpp20_H_de558932_1371_4b17_a2e1_ceaad0fcb1cd

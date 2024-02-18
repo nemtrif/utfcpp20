@@ -26,8 +26,24 @@ include(CTest)
 add_library (ftest INTERFACE)
 target_include_directories(ftest INTERFACE ${ftest_SOURCE_DIR})
 
+
 add_executable(utfcpp20test utfcpp20.test.cpp)
 target_link_libraries(utfcpp20test PRIVATE utfcpp20)
 target_link_libraries(utfcpp20test PRIVATE ftest)
+set_target_properties(utfcpp20test PROPERTIES
+    CXX_STANDARD 20
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS NO
+)
 
-add_test(NAME utfcpp20test COMMAND utfcpp20test)
+add_executable(coretest core.test.cpp)
+target_include_directories(coretest PRIVATE ${PROJECT_SOURCE_DIR}/src)
+target_link_libraries(coretest PRIVATE utfcpp20)
+target_link_libraries(coretest PRIVATE ftest)
+set_target_properties(coretest PROPERTIES
+    CXX_STANDARD 20
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS NO
+)
+
+add_test(coretest coretest)
