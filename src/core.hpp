@@ -31,11 +31,16 @@ namespace utfcpp::internal
     // Maximum valid value for a Unicode code point
     constexpr char32_t CODE_POINT_MAX      {U'\U0010ffff'};
 
-    bool is_utf8_trail(char ch);
+    bool is_utf8_trail(char8_t ch);
 
     bool is_utf16_lead_surrogate(char16_t cp);
     bool is_utf16_trail_surrogate(char16_t cp);
-    bool is_utf16_surrogate(char16_t cp);
+    bool is_utf16_surrogate(char32_t cp);
+
+    bool is_code_point_valid(char32_t cp);
+
+    int sequence_length(char8_t lead_byte);
+
 
 }  // namespace utfcpp::internal
 

@@ -64,7 +64,7 @@ TEST(CoreTests, test_is_utf16_surrogate)
 {
     using namespace utfcpp::internal;
     EXPECT_FALSE(is_utf16_surrogate(u'\u0000'));
-    EXPECT_FALSE(is_utf16_surrogate(u'z'));
+    EXPECT_FALSE(is_utf16_surrogate(U'z'));
     EXPECT_FALSE(is_utf16_surrogate(u'\ud7ff'));
 
     EXPECT_TRUE(is_utf16_surrogate(u'\xd800'));
@@ -75,4 +75,25 @@ TEST(CoreTests, test_is_utf16_surrogate)
     EXPECT_FALSE(is_utf16_surrogate(u'\xe000'));
 
     EXPECT_FALSE(is_utf16_surrogate(u'\uefff'));
+    EXPECT_FALSE(is_utf16_surrogate(U'\U001012af'));
+}
+
+TEST(CoreTests, test_is_code_point_valid)
+{
+    using namespace utfcpp::internal;
+    EXPECT_FALSE(is_code_point_valid(U'\xdbff'));
+    EXPECT_FALSE(is_code_point_valid(U'\x11ffff'));
+
+    EXPECT_TRUE(is_code_point_valid(U'\x80'));
+    EXPECT_TRUE(is_code_point_valid(U'\x99'));
+}
+
+TEST(CoreTests, test_sequence_length)
+{
+    using namespace utfcpp::internal;
+    EXPECT_EQ(sequence_length(u8'Z'), 1);
+    EXPECT_EQ(sequence_length(u8'\x79'), 1);
+    EXPECT_EQ(sequence_length(u8'\xc2'), 2);
+    EXPECT_EQ(sequence_length(u8'\xe0'), 3);
+    EXPECT_EQ(sequence_length(u8'\xf0'), 4);
 }
