@@ -21,8 +21,8 @@ TEST(CoreTests, test_is_utf8_trail)
     EXPECT_FALSE(is_utf8_trail('a'));
     EXPECT_FALSE(is_utf8_trail('\x7F'));
 
-    EXPECT_TRUE(is_utf8_trail('\x80'));
-    EXPECT_TRUE(is_utf8_trail('\x99'));
+    EXPECT_TRUE(is_utf8_trail(u8'\x80'));
+    EXPECT_TRUE(is_utf8_trail(u8'\x99'));
 }
 
 TEST(CoreTests, test_is_utf16_lead_surrogate)
