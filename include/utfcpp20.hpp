@@ -19,6 +19,7 @@
 #include <string_view>
 
 namespace utfcpp20 {
+    void append_to_utf8(std::u8string& utf8string, const char32_t code_point);
     std::u16string utf8_to_16(std::string_view utf8_string);
 } // namespace utfcpp20
 

@@ -117,4 +117,36 @@ namespace utfcpp::internal
         return UTF_ERROR::OK;
     }
 
+    static void add_capacity_if_needed(std::u8string& str, const std::size_t additional_size) {
+        const std::size_t desired_size = str.size() + additional_size;
+        if (str.capacity() < desired_size)
+            str.reserve(desired_size);
+    }
+
+    UTF_ERROR encode_next_utf8(const char32_t code_point, std::u8string& utf8str) {
+        if (!is_code_point_valid(code_point))
+            return UTF_ERROR::INVALID_CODE_POINT;
+
+        if (code_point < 0x80) {                     // 1 byte
+            utf8str.append(1u ,static_cast<char8_t>(code_point));
+        } else if (code_point < 0x800) {             // 2 bytes
+            add_capacity_if_needed(utf8str, 2);
+            utf8str.append(1, static_cast<char8_t>((code_point >> 6)          | 0xc0));
+            utf8str.append(1, static_cast<char8_t>((code_point & 0x3f)        | 0x80));
+        } else if (code_point < 0x10000) {           // 3 bytes
+            add_capacity_if_needed(utf8str, 3);
+            utf8str.append(1, static_cast<char8_t>((code_point >> 12)         | 0xe0));
+            utf8str.append(1, static_cast<char8_t>(((code_point >> 6) & 0x3f) | 0x80));
+            utf8str.append(1, static_cast<char8_t>((code_point & 0x3f)        | 0x80));
+        } else {                                     // 4 bytes
+            add_capacity_if_needed(utf8str, 4);
+            utf8str.append(1, static_cast<char8_t>((code_point >> 18)         | 0xf0));
+            utf8str.append(1, static_cast<char8_t>(((code_point >> 12) & 0x3f)| 0x80));
+            utf8str.append(1, static_cast<char8_t>(((code_point >> 6) & 0x3f) | 0x80));
+            utf8str.append(1, static_cast<char8_t>((code_point & 0x3f)        | 0x80));
+        }
+
+        return UTF_ERROR::OK;
+    }
+
 } // namespace utfcpp::internal

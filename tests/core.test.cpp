@@ -119,3 +119,23 @@ TEST(CoreTests, test_decode_next_utf8)
     EXPECT_EQ(decode_next_utf8(etruscan, cp), UTF_ERROR::OK);
     EXPECT_EQ(cp, U'𐌀');
 }
+
+TEST(CoreTests, test_encode_next_utf8)
+{
+    using namespace utfcpp::internal;
+    std::u8string utf8str;
+    EXPECT_EQ(encode_next_utf8(U'a', utf8str), UTF_ERROR::OK);
+    EXPECT_EQ(utf8str, u8"a");
+
+    utf8str.clear();
+    EXPECT_EQ(encode_next_utf8(U'ц', utf8str), UTF_ERROR::OK);
+    EXPECT_EQ(utf8str, u8"ц");
+
+    utf8str.clear();
+    EXPECT_EQ(encode_next_utf8(U'水', utf8str), UTF_ERROR::OK);
+    EXPECT_EQ(utf8str, u8"水");
+
+    utf8str.clear();
+    EXPECT_EQ(encode_next_utf8(U'𐌀', utf8str), UTF_ERROR::OK);
+    EXPECT_EQ(utf8str, u8"𐌀");
+}

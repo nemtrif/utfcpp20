@@ -16,6 +16,7 @@
 #define core_H_de558932_1371_4b17_a2e1_ceaad0fcb1cd
 
 #include <string_view>
+#include <string>
 #include <cstddef> // std::size_t
 
 namespace utfcpp::internal
@@ -50,6 +51,7 @@ namespace utfcpp::internal
     enum class UTF_ERROR {OK, NOT_ENOUGH_ROOM, INVALID_LEAD, INCOMPLETE_SEQUENCE, OVERLONG_SEQUENCE, INVALID_CODE_POINT};
 
     UTF_ERROR decode_next_utf8(std::u8string_view utf8str, char32_t& code_point);
+    UTF_ERROR encode_next_utf8(const char32_t code_point, std::u8string& utf8str);
 
 }  // namespace utfcpp::internal
 
