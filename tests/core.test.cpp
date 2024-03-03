@@ -97,3 +97,25 @@ TEST(CoreTests, test_sequence_length)
     EXPECT_EQ(sequence_length(u8'\xe0'), 3);
     EXPECT_EQ(sequence_length(u8'\xf0'), 4);
 }
+
+TEST(CoreTests, test_decode_next_utf8)
+{
+    using namespace utfcpp::internal;
+    char32_t cp = 0;
+
+    std::u8string ascii{u8"abcdxyz"};
+    EXPECT_EQ(decode_next_utf8(ascii, cp), UTF_ERROR::OK);
+    EXPECT_EQ(cp, U'a');
+
+    std::u8string cyrillic {u8"шницла"}; // "steak"
+    EXPECT_EQ(decode_next_utf8(cyrillic, cp), UTF_ERROR::OK);
+    EXPECT_EQ(cp, U'ш');
+
+    std::u8string chinese {u8"水手"}; // "sailor"
+    EXPECT_EQ(decode_next_utf8(chinese, cp), UTF_ERROR::OK);
+    EXPECT_EQ(cp, U'水');
+
+    std::u8string etruscan {u8"𐌀"};
+    EXPECT_EQ(decode_next_utf8(etruscan, cp), UTF_ERROR::OK);
+    EXPECT_EQ(cp, U'𐌀');
+}

@@ -15,6 +15,9 @@
 #ifndef core_H_de558932_1371_4b17_a2e1_ceaad0fcb1cd
 #define core_H_de558932_1371_4b17_a2e1_ceaad0fcb1cd
 
+#include <string_view>
+#include <cstddef> // std::size_t
+
 namespace utfcpp::internal
 {
     // Unicode constants
@@ -31,6 +34,9 @@ namespace utfcpp::internal
     // Maximum valid value for a Unicode code point
     constexpr char32_t CODE_POINT_MAX      {U'\U0010ffff'};
 
+    // Replacement character
+    constexpr char32_t REPLACEMENT_CHARACTER {U'\ufffd'};
+
     bool is_utf8_trail(char8_t ch);
 
     bool is_utf16_lead_surrogate(char16_t cp);
@@ -39,8 +45,11 @@ namespace utfcpp::internal
 
     bool is_code_point_valid(char32_t cp);
 
-    int sequence_length(char8_t lead_byte);
+    std::size_t sequence_length(char8_t lead_byte);
 
+    enum class UTF_ERROR {OK, NOT_ENOUGH_ROOM, INVALID_LEAD, INCOMPLETE_SEQUENCE, OVERLONG_SEQUENCE, INVALID_CODE_POINT};
+
+    UTF_ERROR decode_next_utf8(std::u8string_view utf8str, char32_t& code_point);
 
 }  // namespace utfcpp::internal
 

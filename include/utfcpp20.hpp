@@ -16,6 +16,7 @@
 #define uftcpp20_H_de558932_1371_4b17_a2e1_ceaad0fcb1cd
 
 #include <string>
+#include <string_view>
 
 namespace utfcpp20 {
     std::u16string utf8_to_16(std::string_view utf8_string);

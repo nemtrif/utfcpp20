@@ -40,7 +40,7 @@ namespace utfcpp::internal
         return cp < U'\U00010000';
     }
 
-    int sequence_length(char8_t lead_byte) {
+    std::size_t sequence_length(char8_t lead_byte) {
         if (lead_byte < 0x80)
             return 1;
         else if ((lead_byte >> 5) == 0x6)
@@ -53,8 +53,7 @@ namespace utfcpp::internal
             return 0;
     }
 
-    static constexpr bool is_overlong_sequence(char32_t cp, int length)
-    {
+    static constexpr bool is_overlong_sequence(const char32_t cp, const std::size_t length) {
         if (cp < 0x80) {
             if (length != 1) 
                 return true;
@@ -70,6 +69,52 @@ namespace utfcpp::internal
         return false;
     }
 
+    UTF_ERROR decode_next_utf8(std::u8string_view utf8str, char32_t& code_point) {
+        if (utf8str.empty())
+            return UTF_ERROR::NOT_ENOUGH_ROOM;
 
+        // Expected byte length of the utf-8 sequence, according to the lead byte
+        const std::size_t length = sequence_length(utf8str[0]);
+
+        // Incomplete sequence may mean:
+        // 1) utf8str does not contain the required number of bytes, or
+        // 2) some of the expected trail bytes have invalid value
+        if (utf8str.length() < length)
+            return UTF_ERROR::INCOMPLETE_SEQUENCE;
+        for (std::size_t i = 1; i < length; ++i)
+            if (!is_utf8_trail(utf8str[i]))
+                return UTF_ERROR::INCOMPLETE_SEQUENCE;
+
+        // Actual decoding happens here
+        switch (length) {
+            case 0:
+                code_point = REPLACEMENT_CHARACTER;
+                return UTF_ERROR::INVALID_LEAD;
+            break;
+            case 1:
+                code_point = utf8str[0];
+                return UTF_ERROR::OK;
+            break;
+            case 2:
+                code_point = ((utf8str[0] << 6) & 0x7ff) + (utf8str[1] & 0x3f);
+            break;
+            case 3:
+                code_point = ((utf8str[0] << 12) & 0xffff) + ((utf8str[1] << 6) & 0xfff) + (utf8str[2] & 0x3f);
+            break;
+            case 4:
+                code_point = ((utf8str[0] << 18) & 0x1fffff) + ((utf8str[1] << 12) & 0x3ffff)
+                        + ((utf8str[2] << 6) & 0xfff) + (utf8str[4] & 0x3f);
+            break;
+        }
+
+        // Decoding succeeded. Now, security checks...
+        if (!is_code_point_valid(code_point))
+            return UTF_ERROR::INVALID_CODE_POINT;
+        if(is_overlong_sequence(code_point, length))
+            return UTF_ERROR::OVERLONG_SEQUENCE;
+
+        // Success!
+        return UTF_ERROR::OK;
+    }
 
 } // namespace utfcpp::internal
