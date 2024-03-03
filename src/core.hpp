@@ -50,7 +50,7 @@ namespace utfcpp::internal
 
     enum class UTF_ERROR {OK, NOT_ENOUGH_ROOM, INVALID_LEAD, INCOMPLETE_SEQUENCE, OVERLONG_SEQUENCE, INVALID_CODE_POINT};
 
-    UTF_ERROR decode_next_utf8(std::u8string_view utf8str, char32_t& code_point);
+    UTF_ERROR decode_next_utf8(const std::u8string_view utf8str, char32_t& code_point, std::size_t& length);
     UTF_ERROR encode_next_utf8(const char32_t code_point, std::u8string& utf8str);
 
 }  // namespace utfcpp::internal

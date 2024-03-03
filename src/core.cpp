@@ -69,12 +69,12 @@ namespace utfcpp::internal
         return false;
     }
 
-    UTF_ERROR decode_next_utf8(std::u8string_view utf8str, char32_t& code_point) {
+    UTF_ERROR decode_next_utf8(const std::u8string_view utf8str, char32_t& code_point, std::size_t& length) {
         if (utf8str.empty())
             return UTF_ERROR::NOT_ENOUGH_ROOM;
 
         // Expected byte length of the utf-8 sequence, according to the lead byte
-        const std::size_t length = sequence_length(utf8str[0]);
+        length = sequence_length(utf8str[0]);
 
         // Incomplete sequence may mean:
         // 1) utf8str does not contain the required number of bytes, or

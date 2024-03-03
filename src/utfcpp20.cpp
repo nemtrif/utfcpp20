@@ -13,9 +13,13 @@
 //    limitations under the License.
 
 #include "utfcpp20.hpp"
+#include "core.hpp"
 
 namespace utfcpp20 {
 
+    void append_to_utf8(std::u8string& utf8string, const char32_t code_point) {
+        internal::encode_next_utf8(code_point, utf8string);
+    }
 
     std::u16string utf8_to_16(std::string_view utf8_string) {
         return u"";
