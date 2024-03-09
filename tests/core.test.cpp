@@ -102,27 +102,26 @@ TEST(CoreTests, test_decode_next_utf8)
 {
     using namespace utfcpp::internal;
     char32_t cp = 0;
-    std::size_t length;
 
-    std::u8string ascii{u8"abcdxyz"};
-    EXPECT_EQ(decode_next_utf8(ascii, cp, length), UTF_ERROR::OK);
+    std::u8string_view ascii{u8"abcdxyz"};
+    EXPECT_EQ(decode_next_utf8(ascii, cp), UTF_ERROR::OK);
     EXPECT_EQ(cp, U'a');
-    EXPECT_EQ(length, 1);
+    EXPECT_EQ(ascii, u8"bcdxyz");
 
     std::u8string_view cyrillic {u8"шницла"}; // "steak"
-    EXPECT_EQ(decode_next_utf8(cyrillic, cp, length), UTF_ERROR::OK);
+    EXPECT_EQ(decode_next_utf8(cyrillic, cp), UTF_ERROR::OK);
     EXPECT_EQ(cp, U'ш');
-    EXPECT_EQ(length, 2);
+    EXPECT_EQ(cyrillic, u8"ницла");
 
-    std::u8string chinese {u8"水手"}; // "sailor"
-    EXPECT_EQ(decode_next_utf8(chinese, cp, length), UTF_ERROR::OK);
+    std::u8string_view chinese {u8"水手"}; // "sailor"
+    EXPECT_EQ(decode_next_utf8(chinese, cp), UTF_ERROR::OK);
     EXPECT_EQ(cp, U'水');
-    EXPECT_EQ(length, 3);
+    EXPECT_EQ(chinese, u8"手");
 
-    std::u8string etruscan {u8"𐌀"};
-    EXPECT_EQ(decode_next_utf8(etruscan, cp, length), UTF_ERROR::OK);
+    std::u8string_view etruscan {u8"𐌀"};
+    EXPECT_EQ(decode_next_utf8(etruscan, cp), UTF_ERROR::OK);
     EXPECT_EQ(cp, U'𐌀');
-    EXPECT_EQ(length, 4);
+    EXPECT_TRUE(etruscan.empty());
 }
 
 TEST(CoreTests, test_encode_next_utf8)

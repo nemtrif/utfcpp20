@@ -69,12 +69,12 @@ namespace utfcpp::internal
         return false;
     }
 
-    UTF_ERROR decode_next_utf8(const std::u8string_view utf8str, char32_t& code_point, std::size_t& length) {
+    UTF_ERROR decode_next_utf8(std::u8string_view& utf8str, char32_t& code_point) {
         if (utf8str.empty())
             return UTF_ERROR::NOT_ENOUGH_ROOM;
 
         // Expected byte length of the utf-8 sequence, according to the lead byte
-        length = sequence_length(utf8str[0]);
+        const size_t length = sequence_length(utf8str[0]);
 
         // Incomplete sequence may mean:
         // 1) utf8str does not contain the required number of bytes, or
@@ -92,7 +92,9 @@ namespace utfcpp::internal
                 return UTF_ERROR::INVALID_LEAD;
             break;
             case 1:
+            // No need to go through error checks here
                 code_point = utf8str[0];
+                utf8str = std::u8string_view(utf8str.begin() + length, utf8str.end());
                 return UTF_ERROR::OK;
             break;
             case 2:
@@ -113,7 +115,8 @@ namespace utfcpp::internal
         if(is_overlong_sequence(code_point, length))
             return UTF_ERROR::OVERLONG_SEQUENCE;
 
-        // Success!
+        // Success! Change utf8str to point to the remainder of the original sequence
+        utf8str = std::u8string_view(utf8str.begin() + length, utf8str.end());
         return UTF_ERROR::OK;
     }
 
