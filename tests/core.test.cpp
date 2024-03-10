@@ -143,3 +143,24 @@ TEST(CoreTests, test_encode_next_utf8)
     EXPECT_EQ(encode_next_utf8(U'𐌀', utf8str), UTF_ERROR::OK);
     EXPECT_EQ(utf8str, u8"𐌀");
 }
+
+TEST(CoreTests, test_decode_next_utf16)
+{
+    using namespace utfcpp::internal;
+    char32_t cp = 0;
+
+    std::u16string_view ascii{u"abcdxyz"};
+    EXPECT_EQ(decode_next_utf16(ascii, cp), UTF_ERROR::OK);
+    EXPECT_EQ(cp, U'a');
+    EXPECT_EQ(ascii, u"bcdxyz");
+
+    std::u16string_view cyrillic {u"шницла"}; // "steak"
+    EXPECT_EQ(decode_next_utf16(cyrillic, cp), UTF_ERROR::OK);
+    EXPECT_EQ(cp, U'ш');
+    EXPECT_EQ(cyrillic, u"ницла");
+
+    std::u16string_view etruscan {u"𐌀"};
+    EXPECT_EQ(decode_next_utf16(etruscan, cp), UTF_ERROR::OK);
+    EXPECT_EQ(cp, U'𐌀');
+    EXPECT_TRUE(etruscan.empty());
+}

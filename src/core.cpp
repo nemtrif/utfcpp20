@@ -152,4 +152,45 @@ namespace utfcpp::internal
         return UTF_ERROR::OK;
     }
 
+    UTF_ERROR decode_next_utf16(std::u16string_view& utf16str, char32_t& code_point) {
+        if (utf16str.empty())
+            return UTF_ERROR::NOT_ENOUGH_ROOM;
+        const char16_t first_word = utf16str[0];
+        if (!is_utf16_surrogate(first_word)) {
+            code_point = first_word;
+            utf16str = std::u16string_view(utf16str.begin() + 1, utf16str.end());
+            return UTF_ERROR::OK;
+        } else {
+            if (utf16str.length() < 2)
+                return UTF_ERROR::NOT_ENOUGH_ROOM;
+            else if (is_utf16_lead_surrogate(first_word)) {
+                const char16_t second_word = utf16str[1];
+                if (is_utf16_trail_surrogate(second_word)) {
+                    code_point = (first_word << 10) + second_word + SURROGATE_OFFSET;
+                    utf16str = std::u16string_view(utf16str.begin() + 2, utf16str.end());
+                    return UTF_ERROR::OK;
+                } else
+                    return UTF_ERROR::INCOMPLETE_SEQUENCE;
+            } else {
+                return UTF_ERROR::INVALID_LEAD;
+            }
+        }
+
+        return UTF_ERROR::OK;
+    }
+
+
+    UTF_ERROR encode_next_utf16(const char32_t code_point, std::u16string& utf16str) {
+        if (!is_code_point_valid(code_point))
+            return UTF_ERROR::INVALID_CODE_POINT;
+        if (is_in_bmp(code_point))
+            utf16str.append(1, static_cast<char16_t>(code_point));
+        else {
+            // Code points from the supplementary planes are encoded via surrogate pairs
+            utf16str.append(1, static_cast<char16_t>(LEAD_OFFSET + (code_point >> 10)));
+            utf16str.append(1, static_cast<char16_t>(TRAIL_SURROGATE_MIN + (code_point & 0x3FF)));
+        }
+        return UTF_ERROR::OK;
+    }
+
 } // namespace utfcpp::internal

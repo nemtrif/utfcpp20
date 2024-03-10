@@ -53,6 +53,9 @@ namespace utfcpp::internal
     UTF_ERROR decode_next_utf8(std::u8string_view& utf8str, char32_t& code_point);
     UTF_ERROR encode_next_utf8(const char32_t code_point, std::u8string& utf8str);
 
+    UTF_ERROR decode_next_utf16(std::u16string_view& utf16str, char32_t& code_point);
+    UTF_ERROR encode_next_utf16(const char32_t code_point, std::u16string& utf16str);
+
 }  // namespace utfcpp::internal
 
 #endif // core_H_de558932_1371_4b17_a2e1_ceaad0fcb1cd
