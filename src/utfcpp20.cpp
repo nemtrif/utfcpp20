@@ -15,26 +15,32 @@
 #include "utfcpp20.hpp"
 #include "core.hpp"
 
-namespace utfcpp20 {
+namespace utfcpp {
 
-    void append_to_utf8(std::u8string& utf8string, const char32_t code_point) {
-        internal::encode_next_utf8(code_point, utf8string);
+    void append_to_utf8(std::u8string& utf8string, char32_t code_point) {
+        const internal::UTF_ERROR status = internal::encode_next_utf8(code_point, utf8string);
+        if (status != internal::UTF_ERROR::OK)
+            throw encoding_error();
     }
 
-    void append_to_utf16(std::u16string& utf16string, const char32_t code_point) {
-
+    void append_to_utf16(std::u16string& utf16string, char32_t code_point) {
+        const internal::UTF_ERROR status = internal::encode_next_utf16(code_point, utf16string);
+        if (status != internal::UTF_ERROR::OK)
+            throw encoding_error();
     }
 
     std::u16string utf8_to_16(std::u8string_view utf8_string) {
-        std::u8string_view remainder(utf_string);
+        std::u8string_view remainder(utf8_string);
         std::u16string ret16;
         // TODO: pre-allocate return string in a smarter way
         ret16.reserve(utf8_string.length());
         while(!remainder.empty()) {
             char32_t next32char;
-            const UTF_ERROR decode_status = internal::decode_next_utf8 (
+            const internal::UTF_ERROR status = internal::decode_next_utf8(
                 remainder, next32char);
-            // TODO: handle errors
+            if (status != internal::UTF_ERROR::OK)
+                throw decoding_error();
+            append_to_utf16(ret16, next32char);
         }
         return ret16;
     }

@@ -14,3 +14,31 @@
 
 #include "utfcpp20.hpp"
 #include "ftest.h"
+
+TEST(UtfTests, test_append_to_utf8)
+{
+    using namespace utfcpp;
+    std::u8string str;
+    append_to_utf8(str, U'a');
+    EXPECT_EQ(str, u8"a");
+
+    append_to_utf8(str, U'л');
+    EXPECT_EQ(str, u8"aл");
+}
+
+TEST(UtfTests, test_append_to_utf16)
+{
+    using namespace utfcpp;
+    std::u16string str;
+    append_to_utf16(str, U'a');
+    EXPECT_EQ(str, u"a");
+
+    append_to_utf16(str, U'л');
+    EXPECT_EQ(str, u"aл");
+}
+
+TEST(UtfTests, test_utf8_to_16)
+{
+    using namespace utfcpp;
+    EXPECT_EQ(utf8_to_16(u8"aл"), u"aл");
+}

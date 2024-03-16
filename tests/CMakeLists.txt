@@ -35,6 +35,7 @@ set_target_properties(utfcpp20test PROPERTIES
     CXX_STANDARD_REQUIRED YES
     CXX_EXTENSIONS NO
 )
+add_test(utfcpp20test utfcpp20test)
 
 add_executable(coretest core.test.cpp)
 target_include_directories(coretest PRIVATE ${PROJECT_SOURCE_DIR}/src)

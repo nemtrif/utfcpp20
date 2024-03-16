@@ -71,7 +71,7 @@ namespace utfcpp::internal
 
     UTF_ERROR decode_next_utf8(std::u8string_view& utf8str, char32_t& code_point) {
         if (utf8str.empty())
-            return UTF_ERROR::NOT_ENOUGH_ROOM;
+            return UTF_ERROR::INCOMPLETE_SEQUENCE;
 
         // Expected byte length of the utf-8 sequence, according to the lead byte
         const size_t length = sequence_length(utf8str[0]);
@@ -154,7 +154,7 @@ namespace utfcpp::internal
 
     UTF_ERROR decode_next_utf16(std::u16string_view& utf16str, char32_t& code_point) {
         if (utf16str.empty())
-            return UTF_ERROR::NOT_ENOUGH_ROOM;
+            return UTF_ERROR::INCOMPLETE_SEQUENCE;
         const char16_t first_word = utf16str[0];
         if (!is_utf16_surrogate(first_word)) {
             code_point = first_word;
@@ -162,7 +162,7 @@ namespace utfcpp::internal
             return UTF_ERROR::OK;
         } else {
             if (utf16str.length() < 2)
-                return UTF_ERROR::NOT_ENOUGH_ROOM;
+                return UTF_ERROR::INCOMPLETE_SEQUENCE;
             else if (is_utf16_lead_surrogate(first_word)) {
                 const char16_t second_word = utf16str[1];
                 if (is_utf16_trail_surrogate(second_word)) {

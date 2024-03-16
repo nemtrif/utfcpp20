@@ -17,6 +17,8 @@ file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${utfcpp20_SOURCE_DIR}/include/*.hpp")
 set (src_files
     core.hpp
     core.cpp
+    utfcpp20.cpp
+    ../include/utfcpp20.hpp
 )
 
 add_library(utfcpp20 ${src_files} ${HEADER_LIST})
