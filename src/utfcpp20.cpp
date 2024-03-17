@@ -44,4 +44,20 @@ namespace utfcpp {
         }
         return ret16;
     }
+
+    std::u8string utf16_to_8(std::u16string_view utf16_string) {
+        std::u16string_view remainder(utf16_string);
+        std::u8string ret8;
+        // TODO: pre-allocate return string in a smarter way
+        ret8.reserve(utf16_string.length());
+        while(!remainder.empty()) {
+            char32_t next32char;
+            const internal::UTF_ERROR status = internal::decode_next_utf16(
+                remainder, next32char);
+            if (status != internal::UTF_ERROR::OK)
+                throw decoding_error();
+            append_to_utf8(ret8, next32char);
+        }
+        return ret8;
+    }
 } // namespace utfcpp20

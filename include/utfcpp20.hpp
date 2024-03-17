@@ -31,7 +31,10 @@ namespace utfcpp {
 
     void append_to_utf8(std::u8string& utf8string, char32_t code_point);
     void append_to_utf16(std::u16string& utf16string, char32_t code_point);
+
     std::u16string utf8_to_16(std::u8string_view utf8_string);
+    std::u8string utf16_to_8(std::u16string_view utf16_string);
+
 } // namespace utfcpp20
 
 #endif // uftcpp20_H_de558932_1371_4b17_a2e1_ceaad0fcb1cd

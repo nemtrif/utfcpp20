@@ -42,3 +42,9 @@ TEST(UtfTests, test_utf8_to_16)
     using namespace utfcpp;
     EXPECT_EQ(utf8_to_16(u8"aл"), u"aл");
 }
+
+TEST(UtfTests, test_utf16_to_8)
+{
+    using namespace utfcpp;
+    EXPECT_EQ(utf16_to_8(u"aл"), u8"aл");
+}
