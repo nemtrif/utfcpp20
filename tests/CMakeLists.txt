@@ -18,7 +18,7 @@ FetchContent_Declare(
   ftest
 
   GIT_REPOSITORY https://github.com/nemtrif/ftest.git
-  GIT_TAG        0.2)
+  GIT_TAG        0.3)
 
 FetchContent_MakeAvailable(ftest)
 
