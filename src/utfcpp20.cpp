@@ -60,4 +60,16 @@ namespace utfcpp {
         }
         return ret8;
     }
+
+    std::u8string_view::size_type find_invalid(std::u8string_view utf8_string) {
+        std::u8string_view remainder(utf8_string);
+        while (!remainder.empty()) {
+            char32_t ignore;
+            const internal::UTF_ERROR status = internal::decode_next_utf8(
+                remainder, ignore);
+            if (status != internal::UTF_ERROR::OK)
+                return (utf8_string.length() - remainder.length());
+        }
+        return std::u8string_view::npos;
+    }
 } // namespace utfcpp20
