@@ -33,9 +33,10 @@ namespace utfcpp {
     void append_to_utf16(std::u16string& utf16string, char32_t code_point);
 
     std::u16string utf8_to_16(std::u8string_view utf8_string);
-    std::u8string utf16_to_8(std::u16string_view utf16_string);
+    std::u8string  utf16_to_8(std::u16string_view utf16_string);
 
-    std::u8string_view::size_type find_invalid(std::u8string_view utf8_string);
+    std::u8string_view::size_type  find_invalid(std::u8string_view utf8_string);
+    std::u16string_view::size_type find_invalid(std::u16string_view utf16_string);
 
 } // namespace utfcpp20
 

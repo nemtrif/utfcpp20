@@ -72,4 +72,17 @@ namespace utfcpp {
         }
         return std::u8string_view::npos;
     }
+
+    std::u16string_view::size_type find_invalid(std::u16string_view utf16_string) {
+        std::u16string_view remainder(utf16_string);
+        while (!remainder.empty()) {
+            char32_t ignore;
+            const internal::UTF_ERROR status = internal::decode_next_utf16(
+                remainder, ignore);
+            if (status != internal::UTF_ERROR::OK)
+                return (utf16_string.length() - remainder.length());
+        }
+        return std::u16string_view::npos;
+    }
+
 } // namespace utfcpp20
