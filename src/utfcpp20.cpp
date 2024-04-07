@@ -85,4 +85,11 @@ namespace utfcpp {
         return std::u16string_view::npos;
     }
 
+    bool is_valid(std::u8string_view utf8_string) {
+        return (find_invalid(utf8_string) == std::u8string_view::npos);
+    }
+
+    bool is_valid(std::u16string_view utf16_string) {
+        return (find_invalid(utf16_string) == std::u16string_view::npos);
+    }
 } // namespace utfcpp20

@@ -38,6 +38,9 @@ namespace utfcpp {
     std::u8string_view::size_type  find_invalid(std::u8string_view utf8_string);
     std::u16string_view::size_type find_invalid(std::u16string_view utf16_string);
 
+    bool is_valid(std::u8string_view  utf8_string);
+    bool is_valid(std::u16string_view utf16_string);
+
 } // namespace utfcpp20
 
 #endif // uftcpp20_H_de558932_1371_4b17_a2e1_ceaad0fcb1cd
