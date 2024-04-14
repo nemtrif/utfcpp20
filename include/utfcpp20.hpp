@@ -41,6 +41,25 @@ namespace utfcpp {
     bool is_valid(std::u8string_view  utf8_string);
     bool is_valid(std::u16string_view utf16_string);
 
+    class u8_iterator {
+    public:
+        using value_type        = char32_t;
+        using pointer           = char32_t*;
+        using reference         = char32_t&;
+        using difference_type   = std::ptrdiff_t;
+        using iterator_category = std::input_iterator_tag;
+    public:
+        u8_iterator() = default;
+        u8_iterator(std::u8string_view str_view);
+        char32_t operator *() const;
+        auto operator <=>(const u8_iterator&) const = default;
+        u8_iterator& operator ++();
+        u8_iterator  operator ++(int);
+        bool end();
+    private:
+        std::u8string_view range;
+    };
+
 } // namespace utfcpp20
 
 #endif // uftcpp20_H_de558932_1371_4b17_a2e1_ceaad0fcb1cd

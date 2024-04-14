@@ -85,3 +85,33 @@ TEST(UtfTests, test_invalid_utf16)
     EXPECT_EQ(find_invalid(valid_view), std::u16string_view::npos);
     EXPECT_TRUE(is_valid(valid_view));
 }
+
+TEST(u8_iteratorTests, test_iterator_construction)
+{
+    using namespace utfcpp;
+    u8_iterator itempty{u8""};
+    EXPECT_TRUE(itempty.end());
+
+    std::u8string_view cyrillic {u8"шницла"};
+    u8_iterator it{cyrillic};
+    EXPECT_FALSE(it.end());
+}
+
+TEST(u8_iteratorTests, test_iterator_dereference)
+{
+    using namespace utfcpp;
+
+    u8_iterator it{u8"шницла"};
+    EXPECT_FALSE(it.end());
+    EXPECT_EQ(*it, U'ш');
+}
+
+TEST(u8_iteratorTests, test_iterator_iteration)
+{
+    using namespace utfcpp;
+
+    u8_iterator it{u8"шницла"};
+    EXPECT_EQ(*(++it), U'н');
+    EXPECT_EQ(*(it++), U'н');
+    EXPECT_EQ(*it, U'и');
+}

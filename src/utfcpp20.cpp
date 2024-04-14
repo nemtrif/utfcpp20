@@ -92,4 +92,39 @@ namespace utfcpp {
     bool is_valid(std::u16string_view utf16_string) {
         return (find_invalid(utf16_string) == std::u16string_view::npos);
     }
+
+    // Class u8_iterator
+    u8_iterator::u8_iterator(std::u8string_view str_view):
+        range{str_view}
+    {}
+
+    char32_t u8_iterator::operator * () const {
+        std::u8string_view str{range};
+        char32_t code_point;
+        const internal::UTF_ERROR status = internal::decode_next_utf8(str, code_point);
+        if (status != internal::UTF_ERROR::OK)
+            throw decoding_error();
+        return code_point;
+    }
+
+    u8_iterator& u8_iterator::operator ++() {
+        char32_t code_point;
+        const internal::UTF_ERROR status = internal::decode_next_utf8(range, code_point);
+        if (status != internal::UTF_ERROR::OK)
+            throw decoding_error();
+        return *this;
+    }
+
+    u8_iterator u8_iterator::operator ++(int) {
+        u8_iterator temp {*this};
+        char32_t code_point;
+        const internal::UTF_ERROR status = internal::decode_next_utf8(range, code_point);
+        if (status != internal::UTF_ERROR::OK)
+            throw decoding_error();
+        return temp;
+    }
+
+    bool u8_iterator::end() {
+        return range.empty();
+    }
 } // namespace utfcpp20
