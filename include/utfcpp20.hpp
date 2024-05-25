@@ -18,6 +18,9 @@
 #include <string>
 #include <string_view>
 
+// Needed for custom views
+#include <ranges>
+
 namespace utfcpp {
     // Base for the exceptions that may be thrown from the library
     class exception : public ::std::exception {
@@ -58,6 +61,17 @@ namespace utfcpp {
         bool end();
     private:
         std::u8string_view range;
+    };
+
+    class u8_view : public std::ranges::view_interface<std::u8string_view> {
+    private:
+        std::u8string_view str;
+        u8_iterator it;
+    public:
+        u8_view(std::u8string_view s) : str(s), it(s)
+        {}
+        auto begin() { return it; }
+        auto end()   { return str.end(); }
     };
 
 } // namespace utfcpp20

@@ -115,3 +115,13 @@ TEST(u8_iteratorTests, test_iterator_iteration)
     EXPECT_EQ(*(it++), U'н');
     EXPECT_EQ(*it, U'и');
 }
+
+TEST(u8_view_tesst, test_u8_view)
+{
+    using namespace utfcpp;
+    std::u8string_view cyrillic {u8"шницла"};
+    u8_view cyrilic_view(cyrillic);
+
+    auto it = cyrilic_view.begin();
+    EXPECT_EQ(*it, U'ш');
+}
