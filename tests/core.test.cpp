@@ -21,8 +21,8 @@ TEST(CoreTests, test_is_utf8_trail)
     EXPECT_FALSE(is_utf8_trail('a'));
     EXPECT_FALSE(is_utf8_trail('\x7F'));
 
-    EXPECT_TRUE(is_utf8_trail(unsigned char('\x80')));
-    EXPECT_TRUE(is_utf8_trail(unsigned char('\x99')));
+    EXPECT_TRUE(is_utf8_trail((unsigned char)'\x80'));
+    EXPECT_TRUE(is_utf8_trail((unsigned char)'\x99'));
 }
 
 TEST(CoreTests, test_is_utf16_lead_surrogate)
@@ -93,9 +93,9 @@ TEST(CoreTests, test_sequence_length)
     using namespace utfcpp::internal;
     EXPECT_EQ(sequence_length(u8'Z'), 1);
     EXPECT_EQ(sequence_length(u8'\x79'), 1);
-    EXPECT_EQ(sequence_length(unsigned char('\xc2')), 2);
-    EXPECT_EQ(sequence_length(unsigned char('\xe0')), 3);
-    EXPECT_EQ(sequence_length(unsigned char('\xf0')), 4);
+    EXPECT_EQ(sequence_length((unsigned char)'\xc2'), 2);
+    EXPECT_EQ(sequence_length((unsigned char)'\xe0'), 3);
+    EXPECT_EQ(sequence_length((unsigned char)'\xf0'), 4);
 }
 
 TEST(CoreTests, test_decode_next_utf8)
