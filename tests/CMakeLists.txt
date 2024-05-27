@@ -26,6 +26,8 @@ include(CTest)
 add_library (ftest INTERFACE)
 target_include_directories(ftest INTERFACE ${ftest_SOURCE_DIR})
 
+add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 add_executable(utfcpp20test utfcpp20.test.cpp)
 target_link_libraries(utfcpp20test PRIVATE utfcpp20)
