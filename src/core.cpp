@@ -105,7 +105,7 @@ namespace utfcpp::internal
             break;
             case 4:
                 code_point = ((utf8str[0] << 18) & 0x1fffff) + ((utf8str[1] << 12) & 0x3ffff)
-                        + ((utf8str[2] << 6) & 0xfff) + (utf8str[4] & 0x3f);
+                        + ((utf8str[2] << 6) & 0xfff) + (utf8str[3] & 0x3f);
             break;
         }
 
