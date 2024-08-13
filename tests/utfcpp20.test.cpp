@@ -89,12 +89,13 @@ TEST(UtfTests, test_invalid_utf16)
 TEST(u8_iteratorTests, test_iterator_construction)
 {
     using namespace utfcpp;
-    u8_iterator itempty{u8""};
-    EXPECT_TRUE(itempty.end());
+    const std::u8string_view empty_view{u8""};
+    u8_iterator itempty{empty_view};
+    EXPECT_EQ(itempty, empty_view.end());
 
-    std::u8string_view cyrillic {u8"шницла"};
+    std::u8string_view cyrillic{u8"шницла"};
     u8_iterator it{cyrillic};
-    EXPECT_FALSE(it.end());
+    EXPECT_NE(it, cyrillic.end());
 }
 
 TEST(u8_iteratorTests, test_iterator_dereference)
@@ -102,7 +103,6 @@ TEST(u8_iteratorTests, test_iterator_dereference)
     using namespace utfcpp;
 
     u8_iterator it{u8"шницла"};
-    EXPECT_FALSE(it.end());
     EXPECT_EQ(*it, U'ш');
 }
 
@@ -114,14 +114,4 @@ TEST(u8_iteratorTests, test_iterator_iteration)
     EXPECT_EQ(*(++it), U'н');
     EXPECT_EQ(*(it++), U'н');
     EXPECT_EQ(*it, U'и');
-}
-
-TEST(u8_view_tesst, test_u8_view)
-{
-    using namespace utfcpp;
-    std::u8string_view cyrillic {u8"шницла"};
-    u8_view cyrilic_view(cyrillic);
-
-    auto it = cyrilic_view.begin();
-    EXPECT_EQ(*it, U'ш');
 }

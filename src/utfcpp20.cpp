@@ -30,57 +30,53 @@ namespace utfcpp {
     }
 
     std::u16string utf8_to_16(std::u8string_view utf8_string) {
-        std::u8string_view remainder(utf8_string);
+        auto it{utf8_string.begin()}, end_it{utf8_string.end()};
         std::u16string ret16;
         // TODO: pre-allocate return string in a smarter way
         ret16.reserve(utf8_string.length());
-        while(!remainder.empty()) {
-            char32_t next32char;
-            const internal::UTF_ERROR status = internal::decode_next_utf8(
-                remainder, next32char);
+        while (it != end_it) {
+            const auto [next32char, next_cp, status] = internal::decode_next_utf8(it, end_it);
             if (status != internal::UTF_ERROR::OK)
                 throw decoding_error();
             append_to_utf16(ret16, next32char);
+            it = next_cp;
         }
         return ret16;
     }
 
     std::u8string utf16_to_8(std::u16string_view utf16_string) {
-        std::u16string_view remainder(utf16_string);
+        auto it{utf16_string.begin()}, end_it{utf16_string.end()};
         std::u8string ret8;
         // TODO: pre-allocate return string in a smarter way
         ret8.reserve(utf16_string.length());
-        while(!remainder.empty()) {
-            char32_t next32char;
-            const internal::UTF_ERROR status = internal::decode_next_utf16(
-                remainder, next32char);
+        while(it != end_it) {
+            const auto [next32char, next_cp, status] = internal::decode_next_utf16(it, end_it);
             if (status != internal::UTF_ERROR::OK)
                 throw decoding_error();
             append_to_utf8(ret8, next32char);
+            it = next_cp;
         }
         return ret8;
     }
 
     std::u8string_view::size_type find_invalid(std::u8string_view utf8_string) {
-        std::u8string_view remainder(utf8_string);
-        while (!remainder.empty()) {
-            char32_t ignore;
-            const internal::UTF_ERROR status = internal::decode_next_utf8(
-                remainder, ignore);
+        auto it{utf8_string.begin()}, end_it{utf8_string.end()};
+        while (it != end_it) {
+            const auto [ignore, next_cp, status] = internal::decode_next_utf8(it, end_it);
+            it = next_cp;
             if (status != internal::UTF_ERROR::OK)
-                return (utf8_string.length() - remainder.length());
+                return (it - utf8_string.begin());
         }
         return std::u8string_view::npos;
     }
 
     std::u16string_view::size_type find_invalid(std::u16string_view utf16_string) {
-        std::u16string_view remainder(utf16_string);
-        while (!remainder.empty()) {
-            char32_t ignore;
-            const internal::UTF_ERROR status = internal::decode_next_utf16(
-                remainder, ignore);
+        auto it{utf16_string.begin()}, end_it{utf16_string.end()};
+        while (it != end_it) {
+            const auto [ignore, next_cp, status] = internal::decode_next_utf16(it, end_it);
+            it = next_cp;
             if (status != internal::UTF_ERROR::OK)
-                return (utf16_string.length() - remainder.length());
+                return (it - utf16_string.begin());
         }
         return std::u16string_view::npos;
     }
@@ -95,36 +91,34 @@ namespace utfcpp {
 
     // Class u8_iterator
     u8_iterator::u8_iterator(std::u8string_view str_view):
-        range{str_view}
+        it{str_view.begin()}, end_it{str_view.end()}
+    {}
+    
+    u8_iterator::u8_iterator(std::u8string_view::iterator end_seq_it):
+    it{end_seq_it}, end_it{end_seq_it}
     {}
 
     char32_t u8_iterator::operator * () const {
-        std::u8string_view str{range};
-        char32_t code_point;
-        const internal::UTF_ERROR status = internal::decode_next_utf8(str, code_point);
+        auto [code_point, ignore, status] = internal::decode_next_utf8(it, end_it);
         if (status != internal::UTF_ERROR::OK)
             throw decoding_error();
         return code_point;
     }
 
     u8_iterator& u8_iterator::operator ++() {
-        char32_t code_point;
-        const internal::UTF_ERROR status = internal::decode_next_utf8(range, code_point);
+        auto [code_point, next_cp, status] = internal::decode_next_utf8(it, end_it);
         if (status != internal::UTF_ERROR::OK)
             throw decoding_error();
+        it = next_cp;
         return *this;
     }
 
     u8_iterator u8_iterator::operator ++(int) {
         u8_iterator temp {*this};
-        char32_t code_point;
-        const internal::UTF_ERROR status = internal::decode_next_utf8(range, code_point);
+        auto [code_point, next_cp, status] = internal::decode_next_utf8(it, end_it);
         if (status != internal::UTF_ERROR::OK)
             throw decoding_error();
+        it = next_cp;
         return temp;
-    }
-
-    bool u8_iterator::end() {
-        return range.empty();
     }
 } // namespace utfcpp20
