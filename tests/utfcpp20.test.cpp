@@ -107,7 +107,8 @@ TEST(u8_iteratorTests, test_iterator_dereference)
 {
     using namespace utfcpp;
 
-    u8_iterator it{u8"шницла"};
+    std::u8string_view cyrillic{u8"шницла"};
+    u8_iterator it{cyrillic};
     EXPECT_EQ(*it, U'ш');
 }
 
