@@ -70,18 +70,23 @@ namespace utfcpp::internal
             length = 2;
             if (length > max_length)
                 return std::make_tuple(0, begin_it, UTF_ERROR::INCOMPLETE_SEQUENCE);
-            code_point = ((*it++ << 6) & 0x7ff) + (*it++ & 0x3f);
+            code_point = ((*it++ << 6) & 0x7ff);
+            code_point += (*it++ & 0x3f);
         } else if (((*it) >> 4) == 0xe) {
             length = 3;
             if (length > max_length)
                 return std::make_tuple(0, begin_it, UTF_ERROR::INCOMPLETE_SEQUENCE);
-            code_point = ((*it++ << 12) & 0xffff) + ((*it++ << 6) & 0xfff) + (*it++ & 0x3f);
+            code_point = ((*it++ << 12) & 0xffff);
+            code_point += ((*it++ << 6) & 0xfff);
+            code_point += (*it++ & 0x3f);
         } else if ((*it >> 3) == 0x1e) {
             length = 4;
             if (length > max_length)
                 return std::make_tuple(0, begin_it, UTF_ERROR::INCOMPLETE_SEQUENCE);
-            code_point = ((*it++ << 18) & 0x1fffff) + ((*it++ << 12) & 0x3ffff) +
-                            ((*it++ << 6) & 0xfff) + (*it++ & 0x3f);
+            code_point = ((*it++ << 18) & 0x1fffff);
+            code_point += ((*it++ << 12) & 0x3ffff);
+            code_point += ((*it++ << 6) & 0xfff);
+            code_point += (*it++ & 0x3f);
         } else {
             return std::make_tuple(0, begin_it, UTF_ERROR::INVALID_LEAD);
         }
