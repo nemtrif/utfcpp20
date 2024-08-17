@@ -15,6 +15,8 @@
 #include "utfcpp20.hpp"
 #include "ftest.h"
 
+#include <algorithm>
+
 TEST(UtfTests, test_append_to_utf8)
 {
     using namespace utfcpp;
@@ -96,6 +98,9 @@ TEST(u8_iteratorTests, test_iterator_construction)
     std::u8string_view cyrillic{u8"шницла"};
     u8_iterator it{cyrillic};
     EXPECT_NE(it, cyrillic.end());
+
+    u8_iterator end_cyr{cyrillic.end()};
+    EXPECT_EQ(end_cyr, cyrillic.end());
 }
 
 TEST(u8_iteratorTests, test_iterator_dereference)
@@ -110,8 +115,30 @@ TEST(u8_iteratorTests, test_iterator_iteration)
 {
     using namespace utfcpp;
 
-    u8_iterator it{u8"шницла"};
+    std::u8string_view cyrillic{u8"шницла"};
+    u8_iterator it{cyrillic};
     EXPECT_EQ(*(++it), U'н');
     EXPECT_EQ(*(it++), U'н');
     EXPECT_EQ(*it, U'и');
+    int counter = 0;
+    for (it = cyrillic; it != cyrillic.end(); ++it)
+      ++counter;
+    EXPECT_EQ(counter, 6);
 }
+
+TEST(u8_iteratorTests, test_iterator_std_find)
+{
+    using namespace utfcpp;
+
+    std::u8string_view cyrillic{u8"шницла"};
+    u8_iterator cyr_it{cyrillic};
+    u8_iterator cyr_end{cyrillic.end()};
+
+    auto it = std::find(cyr_it, cyr_end, U'ц');
+    EXPECT_NE(it, cyr_end);
+
+    it = std::find(cyr_it, cyr_end, U'w');
+    EXPECT_EQ(it, cyr_end);
+}
+
+
