@@ -92,15 +92,10 @@ TEST(u8_iteratorTests, test_iterator_construction)
 {
     using namespace utfcpp;
     const std::u8string_view empty_view{u8""};
-    u8_iterator itempty{empty_view};
-    EXPECT_EQ(itempty, empty_view.end());
+    EXPECT_EQ(u8_iterator::begin(empty_view), u8_iterator::end(empty_view));
 
     std::u8string_view cyrillic{u8"шницла"};
-    u8_iterator it{cyrillic};
-    EXPECT_NE(it, cyrillic.end());
-
-    u8_iterator end_cyr{cyrillic.end()};
-    EXPECT_EQ(end_cyr, cyrillic.end());
+    EXPECT_NE(u8_iterator::begin(cyrillic), u8_iterator::end(cyrillic));
 }
 
 TEST(u8_iteratorTests, test_iterator_dereference)
@@ -108,7 +103,7 @@ TEST(u8_iteratorTests, test_iterator_dereference)
     using namespace utfcpp;
 
     std::u8string_view cyrillic{u8"шницла"};
-    u8_iterator it{cyrillic};
+    u8_iterator it{u8_iterator::begin(cyrillic)};
     EXPECT_EQ(*it, U'ш');
 }
 
@@ -117,12 +112,13 @@ TEST(u8_iteratorTests, test_iterator_iteration)
     using namespace utfcpp;
 
     std::u8string_view cyrillic{u8"шницла"};
-    u8_iterator it{cyrillic};
+    u8_iterator it{u8_iterator::begin(cyrillic)};
     EXPECT_EQ(*(++it), U'н');
     EXPECT_EQ(*(it++), U'н');
     EXPECT_EQ(*it, U'и');
     int counter = 0;
-    for (it = cyrillic; it != cyrillic.end(); ++it)
+    auto cyr_end{u8_iterator::end(cyrillic)};
+    for (it = u8_iterator::begin(cyrillic); it != cyr_end; ++it)
       ++counter;
     EXPECT_EQ(counter, 6);
 }
@@ -132,8 +128,8 @@ TEST(u8_iteratorTests, test_iterator_std_find)
     using namespace utfcpp;
 
     std::u8string_view cyrillic{u8"шницла"};
-    u8_iterator cyr_it{cyrillic};
-    u8_iterator cyr_end{cyrillic.end()};
+    u8_iterator cyr_it{u8_iterator::begin(cyrillic)};
+    u8_iterator cyr_end{u8_iterator::end(cyrillic)};
 
     auto it = std::find(cyr_it, cyr_end, U'ц');
     EXPECT_NE(it, cyr_end);

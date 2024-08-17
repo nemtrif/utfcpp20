@@ -49,14 +49,15 @@ namespace utfcpp {
         using difference_type   = std::ptrdiff_t;
         using iterator_category = std::input_iterator_tag;
     public:
-        u8_iterator() = default;
-        u8_iterator(std::u8string_view str_view);
-        u8_iterator(std::u8string_view::iterator end_seq_it);
+        static u8_iterator begin(std::u8string_view str_view);
+        static u8_iterator end(std::u8string_view str_view);
         char32_t operator *() const;
         auto operator <=>(const u8_iterator&) const = default;
         u8_iterator& operator ++();
         u8_iterator  operator ++(int);
     private:
+        u8_iterator(std::u8string_view::iterator begin,
+                    std::u8string_view::iterator end);
         std::u8string_view::iterator it;
         std::u8string_view::iterator end_it;
     };

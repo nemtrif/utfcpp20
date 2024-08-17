@@ -90,12 +90,18 @@ namespace utfcpp {
     }
 
     // Class u8_iterator
-    u8_iterator::u8_iterator(std::u8string_view str_view):
-        it{str_view.begin()}, end_it{str_view.end()}
-    {}
-    
-    u8_iterator::u8_iterator(std::u8string_view::iterator end_seq_it):
-    it{end_seq_it}, end_it{end_seq_it}
+
+    /* static */ u8_iterator u8_iterator::begin(std::u8string_view str_view) {
+      return u8_iterator(str_view.begin(), str_view.end());
+    }
+
+    /* static */ u8_iterator u8_iterator::end(std::u8string_view str_view) {
+      return u8_iterator(str_view.end(), str_view.end());
+    }
+
+    u8_iterator::u8_iterator(std::u8string_view::iterator begin,
+        std::u8string_view::iterator end): 
+        it{begin}, end_it{end}
     {}
 
     char32_t u8_iterator::operator * () const {
