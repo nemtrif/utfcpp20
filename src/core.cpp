@@ -54,6 +54,15 @@ namespace utfcpp::internal
         return false;
     }
 
+    static constexpr std::u8string_view::difference_type
+    utf8_cp_length(char8_t lead_byte) {
+        if (lead_byte < 0x80)               return 1;
+        else if ((lead_byte >> 5) == 0x6)   return 2;
+        else if ((lead_byte >> 4) == 0xe)   return 3;
+        else if ((lead_byte >> 3) == 0x1e)  return 4;
+        else                                return 0; // invalid lead byte
+    }
+
     std::tuple<char32_t, std::u8string_view::iterator, UTF_ERROR>
     decode_next_utf8(std::u8string_view::iterator begin_it, std::u8string_view::iterator end_it) {
         const std::u8string_view::difference_type max_length = end_it - begin_it;
@@ -61,33 +70,31 @@ namespace utfcpp::internal
             return std::make_tuple(0, begin_it, UTF_ERROR::INCOMPLETE_SEQUENCE);
 
         // Actual decoding
-        ptrdiff_t length{0};
         char32_t code_point{0};
         auto it{begin_it};
-        if ((*it) < 0x80) {
+        const std::u8string_view::difference_type length{utf8_cp_length(*it)};
+        if (length > max_length)
+            return std::make_tuple(0, begin_it, UTF_ERROR::INCOMPLETE_SEQUENCE);
+        switch (length) {
+        case 1:
             return std::make_tuple(*it++, it, UTF_ERROR::OK);
-        } else if (((*it) >> 5) == 0x6) {
-            length = 2;
-            if (length > max_length)
-                return std::make_tuple(0, begin_it, UTF_ERROR::INCOMPLETE_SEQUENCE);
+            break;
+        case 2:
             code_point = ((*it++ << 6) & 0x7ff);
             code_point += (*it++ & 0x3f);
-        } else if (((*it) >> 4) == 0xe) {
-            length = 3;
-            if (length > max_length)
-                return std::make_tuple(0, begin_it, UTF_ERROR::INCOMPLETE_SEQUENCE);
+            break;
+        case 3:
             code_point = ((*it++ << 12) & 0xffff);
             code_point += ((*it++ << 6) & 0xfff);
             code_point += (*it++ & 0x3f);
-        } else if ((*it >> 3) == 0x1e) {
-            length = 4;
-            if (length > max_length)
-                return std::make_tuple(0, begin_it, UTF_ERROR::INCOMPLETE_SEQUENCE);
+            break;
+        case 4:
             code_point = ((*it++ << 18) & 0x1fffff);
             code_point += ((*it++ << 12) & 0x3ffff);
             code_point += ((*it++ << 6) & 0xfff);
             code_point += (*it++ & 0x3f);
-        } else {
+            break;
+        default:
             return std::make_tuple(0, begin_it, UTF_ERROR::INVALID_LEAD);
         }
 
