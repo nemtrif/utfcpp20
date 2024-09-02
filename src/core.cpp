@@ -40,6 +40,7 @@ namespace utfcpp::internal
         return cp < U'\U00010000';
     }
 
+
     static constexpr bool is_overlong_sequence(const char32_t cp, const std::size_t length) {
         if (cp < 0x80) {
             if (length != 1) 
@@ -62,6 +63,55 @@ namespace utfcpp::internal
         else if ((lead_byte >> 3) == 0x1e)  return 4;
         else                                return 0; // invalid lead byte
     }
+
+    std::tuple<size_t, size_t, UTF_ERROR>
+        validate(std::u8string_view utf8str) {
+        auto it{utf8str.begin()}, end_it{utf8str.end()};
+        size_t u16_count{0}, cp_count{0};
+        while (it != end_it) {
+            char8_t lead_byte = *it++;
+            auto cp_length = utf8_cp_length(lead_byte);
+            switch (cp_length) {
+            case 0:
+                return std::make_tuple(u16_count, cp_count, UTF_ERROR::INVALID_LEAD);
+            case 1:
+                cp_count++; u16_count++;
+                break;
+            case 2: {
+                const char8_t trail = *it;
+                if (it == end_it || !is_utf8_trail(trail))
+                    return std::make_tuple(u16_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
+                cp_count++; u16_count++; it++;
+                break;
+                }
+            case 3: {
+                const char8_t first_trail = *it;
+                if (it == end_it || !is_utf8_trail(first_trail))
+                    return std::make_tuple(u16_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
+                const char8_t second_trail = *(++it);
+                if (it == end_it || !is_utf8_trail(second_trail))
+                    return std::make_tuple(u16_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
+                cp_count++; u16_count++; it++;
+                break;
+                }
+            case 4: {
+                const char8_t first_trail = *it;
+                if (it == end_it || !is_utf8_trail(first_trail))
+                    return std::make_tuple(u16_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
+                const char8_t second_trail = *(++it);
+                if (it == end_it || !is_utf8_trail(second_trail))
+                    return std::make_tuple(u16_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
+                const char8_t third_trail = *(++it);
+                if (it == end_it || !is_utf8_trail(third_trail))
+                    return std::make_tuple(u16_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
+                cp_count++; u16_count += 2; it++; // note that we need 2 utf-16 bytes in this case
+                break;
+                }
+            }
+        }
+        return std::make_tuple(u16_count, cp_count, UTF_ERROR::OK);
+    }
+
 
     std::tuple<char32_t, std::u8string_view::iterator, UTF_ERROR>
     decode_next_utf8(std::u8string_view::iterator begin_it, std::u8string_view::iterator end_it) {

@@ -88,6 +88,36 @@ TEST(CoreTests, test_is_code_point_valid)
     EXPECT_TRUE(is_code_point_valid(U'\x99'));
 }
 
+TEST(CoreTests, test_validate_u8)
+{
+    using namespace utfcpp::internal;
+    auto [u16cv, cp, ok] = validate(u8"A valid ascii string");
+    EXPECT_EQ(cp, 20);
+    EXPECT_EQ(u16cv, 20);
+    EXPECT_EQ(ok, UTF_ERROR::OK);
+
+    std::tie(u16cv, cp, ok) = validate(u8"Ћирилица");
+    EXPECT_EQ(cp, 8);
+    EXPECT_EQ(u16cv, 8);
+    EXPECT_EQ(ok, UTF_ERROR::OK);
+
+    std::tie(u16cv, cp, ok) = validate(u8"水手");
+    EXPECT_EQ(cp, 2);
+    EXPECT_EQ(u16cv, 2);
+    EXPECT_EQ(ok, UTF_ERROR::OK);
+
+    std::tie(u16cv, cp, ok) = validate(u8"𐌀");
+    EXPECT_EQ(cp, 1);
+    EXPECT_EQ(u16cv, 2);
+    EXPECT_EQ(ok, UTF_ERROR::OK);
+
+    // \xfa is invalid (unexpected continuation byte)
+    const char utf8_invalid[] = "\xe6\x97\xa5\xd1\x88\xfa";
+    std::u8string_view invalid_view(reinterpret_cast<const char8_t*>(utf8_invalid), strlen(utf8_invalid));
+    std::tie(u16cv, cp, ok) = validate(invalid_view);
+    EXPECT_EQ(ok, UTF_ERROR::INVALID_LEAD);
+}
+
 TEST(CoreTests, test_decode_next_utf8)
 {
     using namespace utfcpp::internal;

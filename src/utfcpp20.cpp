@@ -32,8 +32,10 @@ namespace utfcpp {
     std::u16string utf8_to_16(std::u8string_view utf8_string) {
         auto it{utf8_string.begin()}, end_it{utf8_string.end()};
         std::u16string ret16;
-        // TODO: pre-allocate return string in a smarter way
-        ret16.reserve(utf8_string.length());
+        const auto [u16_length, cp_length, valid] = internal::validate(utf8_string);
+        if (valid != internal::UTF_ERROR::OK)
+            throw decoding_error();
+        ret16.reserve(u16_length);
         while (it != end_it) {
             const auto [next32char, next_cp, status] = internal::decode_next_utf8(it, end_it);
             if (status != internal::UTF_ERROR::OK)

@@ -49,6 +49,9 @@ namespace utfcpp::internal
 
     enum class UTF_ERROR {OK, NOT_ENOUGH_ROOM, INVALID_LEAD, INCOMPLETE_SEQUENCE, OVERLONG_SEQUENCE, INVALID_CODE_POINT};
 
+    std::tuple<size_t, size_t, UTF_ERROR>
+    validate(std::u8string_view utf8str);
+
     std::tuple<char32_t, std::u8string_view::iterator, UTF_ERROR>
     decode_next_utf8(std::u8string_view::iterator begin_it, std::u8string_view::iterator end_it);
     
