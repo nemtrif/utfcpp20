@@ -52,6 +52,9 @@ namespace utfcpp::internal
     std::tuple<size_t, size_t, UTF_ERROR>
     validate(std::u8string_view utf8str);
 
+    std::tuple<size_t, size_t, UTF_ERROR>
+    validate(std::u16string_view utf16str);
+
     std::tuple<char32_t, std::u8string_view::iterator, UTF_ERROR>
     decode_next_utf8(std::u8string_view::iterator begin_it, std::u8string_view::iterator end_it);
     

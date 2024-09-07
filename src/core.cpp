@@ -64,6 +64,16 @@ namespace utfcpp::internal
         else                                return 0; // invalid lead byte
     }
 
+    static constexpr size_t
+    utf8_cp_length(char16_t utf16_lead) {
+        if (utf16_lead < 0x80)                          return 1;
+        else if (utf16_lead < 0x800)                    return 2;
+        else if (!is_utf16_surrogate(utf16_lead))       return 3;
+        else if (is_utf16_lead_surrogate(utf16_lead))   return 4;
+        else                                            return 0; // invalid lead
+    }
+
+
     std::tuple<size_t, size_t, UTF_ERROR>
         validate(std::u8string_view utf8str) {
         auto it{utf8str.begin()}, end_it{utf8str.end()};
@@ -110,6 +120,35 @@ namespace utfcpp::internal
             }
         }
         return std::make_tuple(u16_count, cp_count, UTF_ERROR::OK);
+    }
+
+
+    std::tuple<size_t, size_t, UTF_ERROR>
+        validate(std::u16string_view utf16str) {
+        auto it{ utf16str.begin() }, end_it{ utf16str.end() };
+        size_t u8_count{ 0 }, cp_count{ 0 };
+        while (it != end_it) {
+            const char16_t first_word = *it++;
+            if (!is_utf16_surrogate(first_word)) {
+                u8_count += utf8_cp_length(first_word);
+                cp_count++;
+            }
+            else {
+                if (it == end_it)
+                    return std::make_tuple(u8_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
+                else {
+                    const char16_t second_word = *it++;
+                    if (is_utf16_trail_surrogate(second_word)) {
+                        u8_count += 4;
+                        cp_count++;
+                    }
+                    else {
+                        return std::make_tuple(u8_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
+                    }
+                }
+            }
+        }
+        return std::make_tuple(u8_count, cp_count, UTF_ERROR::OK);
     }
 
 

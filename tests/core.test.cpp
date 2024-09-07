@@ -118,6 +118,33 @@ TEST(CoreTests, test_validate_u8)
     EXPECT_EQ(ok, UTF_ERROR::INVALID_LEAD);
 }
 
+TEST(CoreTests, test_validate_u16)
+{
+    using namespace utfcpp::internal;
+    auto [u8cv, cp, ok] = validate(u"A valid ascii string");
+    EXPECT_EQ(cp, 20);
+    EXPECT_EQ(u8cv, 20);
+    EXPECT_EQ(ok, UTF_ERROR::OK);
+
+    std::tie(u8cv, cp, ok) = validate(u"Ћирилица");
+    EXPECT_EQ(cp, 8);
+    EXPECT_EQ(u8cv, 16);
+    EXPECT_EQ(ok, UTF_ERROR::OK);
+
+    std::tie(u8cv, cp, ok) = validate(u"水手");
+    EXPECT_EQ(cp, 2);
+    EXPECT_EQ(u8cv, 6);
+    EXPECT_EQ(ok, UTF_ERROR::OK);
+
+    std::tie(u8cv, cp, ok) = validate(u"𐌀");
+    EXPECT_EQ(cp, 1);
+    EXPECT_EQ(u8cv, 4);
+    EXPECT_EQ(ok, UTF_ERROR::OK);
+
+    std::tie(u8cv, cp, ok) = validate(u"a\xdab0");
+    EXPECT_EQ(ok, UTF_ERROR::INCOMPLETE_SEQUENCE);
+}
+
 TEST(CoreTests, test_decode_next_utf8)
 {
     using namespace utfcpp::internal;
