@@ -17,7 +17,7 @@
 namespace utfcpp::internal
 {
     bool is_utf8_trail(char8_t ch) {
-        return (ch > 0x7fu);
+        return ((ch >> 6) == 0x2);
     }
 
     bool is_utf16_lead_surrogate(char16_t cp) {
@@ -73,84 +73,24 @@ namespace utfcpp::internal
         else                                            return 0; // invalid lead
     }
 
-
-    std::tuple<size_t, size_t, UTF_ERROR>
-        validate(std::u8string_view utf8str) {
-        auto it{utf8str.begin()}, end_it{utf8str.end()};
-        size_t u16_count{0}, cp_count{0};
-        while (it != end_it) {
-            char8_t lead_byte = *it++;
-            auto cp_length = utf8_cp_length(lead_byte);
-            switch (cp_length) {
-            case 0:
-                return std::make_tuple(u16_count, cp_count, UTF_ERROR::INVALID_LEAD);
-            case 1:
-                cp_count++; u16_count++;
-                break;
-            case 2: {
-                const char8_t trail = *it;
-                if (it == end_it || !is_utf8_trail(trail))
-                    return std::make_tuple(u16_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
-                cp_count++; u16_count++; it++;
-                break;
-                }
-            case 3: {
-                const char8_t first_trail = *it;
-                if (it == end_it || !is_utf8_trail(first_trail))
-                    return std::make_tuple(u16_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
-                const char8_t second_trail = *(++it);
-                if (it == end_it || !is_utf8_trail(second_trail))
-                    return std::make_tuple(u16_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
-                cp_count++; u16_count++; it++;
-                break;
-                }
-            case 4: {
-                const char8_t first_trail = *it;
-                if (it == end_it || !is_utf8_trail(first_trail))
-                    return std::make_tuple(u16_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
-                const char8_t second_trail = *(++it);
-                if (it == end_it || !is_utf8_trail(second_trail))
-                    return std::make_tuple(u16_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
-                const char8_t third_trail = *(++it);
-                if (it == end_it || !is_utf8_trail(third_trail))
-                    return std::make_tuple(u16_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
-                cp_count++; u16_count += 2; it++; // note that we need 2 utf-16 bytes in this case
-                break;
-                }
-            }
+    size_t estimate16(std::u8string_view utf8str) {
+        size_t utf16units{0};
+        for (auto c : utf8str) {
+            if (is_utf8_trail(c))       continue;
+            else if ((c >> 3) == 0x1e)  utf16units += 2;
+            else                        utf16units++;
         }
-        return std::make_tuple(u16_count, cp_count, UTF_ERROR::OK);
+        return utf16units;
     }
 
-
-    std::tuple<size_t, size_t, UTF_ERROR>
-        validate(std::u16string_view utf16str) {
-        auto it{ utf16str.begin() }, end_it{ utf16str.end() };
-        size_t u8_count{ 0 }, cp_count{ 0 };
-        while (it != end_it) {
-            const char16_t first_word = *it++;
-            if (!is_utf16_surrogate(first_word)) {
-                u8_count += utf8_cp_length(first_word);
-                cp_count++;
-            }
-            else {
-                if (it == end_it)
-                    return std::make_tuple(u8_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
-                else {
-                    const char16_t second_word = *it++;
-                    if (is_utf16_trail_surrogate(second_word)) {
-                        u8_count += 4;
-                        cp_count++;
-                    }
-                    else {
-                        return std::make_tuple(u8_count, cp_count, UTF_ERROR::INCOMPLETE_SEQUENCE);
-                    }
-                }
-            }
+    size_t estimate8(std::u16string_view utf16str) {
+        size_t utf8_units{0};
+        for (auto c : utf16str) {
+            if      (!is_utf16_surrogate(c))     utf8_units += utf8_cp_length(c);
+            else if (is_utf16_lead_surrogate(c)) utf8_units += 4;
         }
-        return std::make_tuple(u8_count, cp_count, UTF_ERROR::OK);
+        return utf8_units;
     }
-
 
     std::tuple<char32_t, std::u8string_view::iterator, UTF_ERROR>
     decode_next_utf8(std::u8string_view::iterator begin_it, std::u8string_view::iterator end_it) {

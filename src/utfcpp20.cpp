@@ -32,9 +32,7 @@ namespace utfcpp {
     std::u16string utf8_to_16(std::u8string_view utf8_string) {
         auto it{utf8_string.begin()}, end_it{utf8_string.end()};
         std::u16string ret16;
-        const auto [u16_length, cp_length, valid] = internal::validate(utf8_string);
-        if (valid != internal::UTF_ERROR::OK)
-            throw decoding_error();
+        const size_t u16_length = internal::estimate16(utf8_string);
         ret16.reserve(u16_length);
         while (it != end_it) {
             const auto [next32char, next_cp, status] = internal::decode_next_utf8(it, end_it);
@@ -49,7 +47,7 @@ namespace utfcpp {
     std::u8string utf16_to_8(std::u16string_view utf16_string) {
         auto it{utf16_string.begin()}, end_it{utf16_string.end()};
         std::u8string ret8;
-        const auto [u8_length, cp_length, valid] = internal::validate(utf16_string);
+        const size_t u8_length = internal::estimate8(utf16_string);
         ret8.reserve(u8_length);
         while(it != end_it) {
             const auto [next32char, next_cp, status] = internal::decode_next_utf16(it, end_it);
