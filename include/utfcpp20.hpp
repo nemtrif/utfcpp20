@@ -35,12 +35,6 @@ namespace utfcpp {
     std::u16string utf8_to_16(std::u8string_view utf8_string);
     std::u8string  utf16_to_8(std::u16string_view utf16_string);
 
-    std::u8string_view::iterator find_invalid(std::u8string_view utf8_string);
-    std::u16string_view::iterator find_invalid(std::u16string_view utf16_string);
-
-    bool is_valid(std::u8string_view  utf8_string);
-    bool is_valid(std::u16string_view utf16_string);
-
     class u8_iterator {
     public:
         using value_type        = char32_t;

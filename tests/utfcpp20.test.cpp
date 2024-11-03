@@ -61,33 +61,6 @@ TEST(UtfTests, test_utf16_to_8)
     EXPECT_THROW(utf16_to_8(invalid_view), decoding_error);
 }
 
-TEST(UtfTests, test_invalid_utf8)
-{
-    using namespace utfcpp;
-    // \xfa is invalid (unexpected continuation byte)
-    const char utf8_invalid[] = "\xe6\x97\xa5\xd1\x88\xfa";
-    std::u8string_view invalid_view(reinterpret_cast<const char8_t*>(utf8_invalid), strlen(utf8_invalid));
-    EXPECT_EQ(find_invalid(invalid_view), invalid_view.begin() + 5);
-    EXPECT_FALSE(is_valid(invalid_view));
-
-    std::u8string_view valid_view(u8"aл");
-    EXPECT_EQ(find_invalid(valid_view), valid_view.end());
-    EXPECT_TRUE(is_valid(valid_view));
-}
-
-TEST(UtfTests, test_invalid_utf16)
-{
-    using namespace utfcpp;
-    // 0xdd1e is invalid (unexpected tail surrogate)
-    const char16_t utf16_invalid[] = {0x41, 0x0448, 0x65e5, 0xdd1e};
-    std::u16string_view invalid_view(reinterpret_cast<const char16_t*>(utf16_invalid), 4);
-    EXPECT_EQ(find_invalid(invalid_view), invalid_view.begin() + 3);
-
-    std::u16string_view valid_view(u"aл");
-    EXPECT_EQ(find_invalid(valid_view), valid_view.end());
-    EXPECT_TRUE(is_valid(valid_view));
-}
-
 TEST(u8_iteratorTests, test_iterator_construction)
 {
     using namespace utfcpp;

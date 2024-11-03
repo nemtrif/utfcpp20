@@ -59,35 +59,6 @@ namespace utfcpp {
         return ret8;
     }
 
-    std::u8string_view::iterator find_invalid(std::u8string_view utf8_string) {
-        auto it{utf8_string.begin()}, end_it{utf8_string.end()};
-        while (it != end_it) {
-            const auto [ignore, next_cp, status] = internal::decode_next_utf8(it, end_it);
-            it = next_cp;
-            if (status != internal::UTF_ERROR::OK)
-                return it;
-        }
-        return end_it;
-    }
-
-    std::u16string_view::iterator find_invalid(std::u16string_view utf16_string) {
-        auto it{utf16_string.begin()}, end_it{utf16_string.end()};
-        while (it != end_it) {
-            const auto [ignore, next_cp, status] = internal::decode_next_utf16(it, end_it);
-            it = next_cp;
-            if (status != internal::UTF_ERROR::OK)
-                return it;
-        }
-        return end_it;
-    }
-
-    bool is_valid(std::u8string_view utf8_string) {
-        return (find_invalid(utf8_string) == utf8_string.end());
-    }
-
-    bool is_valid(std::u16string_view utf16_string) {
-      return (find_invalid(utf16_string) == utf16_string.end());
-    }
 
     // Class u8_iterator
 
