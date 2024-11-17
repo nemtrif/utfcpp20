@@ -47,21 +47,19 @@ namespace utfcpp::internal
 
     bool is_code_point_valid(char32_t cp);
 
-    enum class UTF_ERROR {OK, NOT_ENOUGH_ROOM, INVALID_LEAD, INCOMPLETE_SEQUENCE, OVERLONG_SEQUENCE, INVALID_CODE_POINT};
-
     size_t estimate16(std::u8string_view utf8str);
 
     size_t estimate8(std::u16string_view utf16str);
 
-    std::tuple<char32_t, std::u8string_view::iterator, UTF_ERROR>
+    std::tuple<char32_t, std::u8string_view::iterator>
     decode_next_utf8(std::u8string_view::iterator begin_it, std::u8string_view::iterator end_it);
     
-    UTF_ERROR encode_next_utf8(const char32_t code_point, std::u8string& utf8str);
+    void encode_next_utf8(const char32_t code_point, std::u8string& utf8str);
 
-    std::tuple<char32_t, std::u16string_view::iterator, UTF_ERROR>
+    std::tuple<char32_t, std::u16string_view::iterator>
     decode_next_utf16(std::u16string_view::iterator begin_it, std::u16string_view::iterator end_it);
     
-    UTF_ERROR encode_next_utf16(const char32_t code_point, std::u16string& utf16str);
+    void encode_next_utf16(const char32_t code_point, std::u16string& utf16str);
 
 }  // namespace utfcpp::internal
 

@@ -13,9 +13,52 @@
 //    limitations under the License.
 
 #include "core.hpp"
+#include "utfcpp20.hpp"
 
 namespace utfcpp::internal
 {
+    class internal_decoding_8_error : public decoding_error {
+    public:
+        internal_decoding_8_error(const char* msg, std::u8string_view::iterator pos) :
+            message(msg), position(pos)
+        {}
+    private:
+        std::string message;
+        std::u8string_view::iterator position;
+    };
+
+    class internal_decoding_16_error : public decoding_error {
+    public:
+        internal_decoding_16_error(const char* msg, std::u16string_view::iterator pos) :
+            message(msg), position(pos)
+        {
+        }
+    private:
+        std::string message;
+        std::u16string_view::iterator position;
+    };
+
+    class internal_encoding_8_error : public encoding_error {
+    public:
+        internal_encoding_8_error(const char* msg, char32_t cp) :
+            message(msg), code_point(cp)
+        {}
+    private:
+        std::string message;
+        char32_t code_point;
+    };
+
+    class internal_encoding_16_error : public encoding_error {
+    public:
+        internal_encoding_16_error(const char* msg, char32_t cp) :
+            message(msg), code_point(cp)
+        {}
+    private:
+        std::string message;
+        char32_t code_point;
+    };
+
+
     bool is_utf8_trail(char8_t ch) {
         return ((ch >> 6) == 0x2);
     }
@@ -92,21 +135,21 @@ namespace utfcpp::internal
         return utf8_units;
     }
 
-    std::tuple<char32_t, std::u8string_view::iterator, UTF_ERROR>
+    std::tuple<char32_t, std::u8string_view::iterator>
     decode_next_utf8(std::u8string_view::iterator begin_it, std::u8string_view::iterator end_it) {
         const std::u8string_view::difference_type max_length = end_it - begin_it;
         if (max_length < 1)
-            return std::make_tuple(0, begin_it, UTF_ERROR::INCOMPLETE_SEQUENCE);
+            throw internal_decoding_8_error("Incomplete sequence", begin_it);
 
         // Actual decoding
         char32_t code_point{0};
         auto it{begin_it};
         const std::u8string_view::difference_type length{utf8_cp_length(*it)};
         if (length > max_length)
-            return std::make_tuple(0, begin_it, UTF_ERROR::INCOMPLETE_SEQUENCE);
+            throw internal_decoding_8_error("Incomplete sequence", begin_it);
         switch (length) {
         case 1:
-            return std::make_tuple(*it++, it, UTF_ERROR::OK);
+            return std::make_tuple(*it++, it);
             break;
         case 2:
             code_point = ((*it++ << 6) & 0x7ff);
@@ -124,17 +167,17 @@ namespace utfcpp::internal
             code_point += (*it++ & 0x3f);
             break;
         default:
-            return std::make_tuple(0, begin_it, UTF_ERROR::INVALID_LEAD);
+            throw internal_decoding_8_error("Invalid lead", begin_it);
         }
 
         // Decoding succeeded. Now, security checks...
         if (!is_code_point_valid(code_point))
-            return std::make_tuple(code_point, begin_it, UTF_ERROR::INVALID_CODE_POINT);
+            throw internal_decoding_8_error("Invalid code point", begin_it);
         if (is_overlong_sequence(code_point, length))
-            return std::make_tuple(code_point, begin_it, UTF_ERROR::OVERLONG_SEQUENCE);
+            throw internal_decoding_8_error("Overlong sequence", begin_it);
 
         // Success!
-        return std::make_tuple(code_point, it, UTF_ERROR::OK);
+        return std::make_tuple(code_point, it);
     }
 
     static void add_capacity_if_needed(std::u8string& str, const std::size_t additional_size) {
@@ -143,9 +186,9 @@ namespace utfcpp::internal
             str.reserve(desired_size);
     }
 
-    UTF_ERROR encode_next_utf8(const char32_t code_point, std::u8string& utf8str) {
+    void encode_next_utf8(const char32_t code_point, std::u8string& utf8str) {
         if (!is_code_point_valid(code_point))
-            return UTF_ERROR::INVALID_CODE_POINT;
+            throw internal_encoding_8_error("Invalid code point", code_point);
 
         if (code_point < 0x80) {                     // 1 byte
             utf8str.append(1u ,static_cast<char8_t>(code_point));
@@ -165,40 +208,37 @@ namespace utfcpp::internal
             utf8str.append(1, static_cast<char8_t>(((code_point >> 6) & 0x3f) | 0x80));
             utf8str.append(1, static_cast<char8_t>((code_point & 0x3f)        | 0x80));
         }
-
-        return UTF_ERROR::OK;
     }
 
-    std::tuple<char32_t, std::u16string_view::iterator, UTF_ERROR>
+    std::tuple<char32_t, std::u16string_view::iterator>
     decode_next_utf16(std::u16string_view::iterator begin_it,
                       std::u16string_view::iterator end_it) {
         if (begin_it >= end_it)
-            return std::make_tuple(0, begin_it, UTF_ERROR::INCOMPLETE_SEQUENCE);
+            throw internal_decoding_16_error("Incomplete seqence", begin_it);
         auto it{begin_it};
         const char16_t first_word = *it++;
         if (!is_utf16_surrogate(first_word)) {
-            return std::make_tuple(first_word, it, UTF_ERROR::OK);
+            return std::make_tuple(first_word, it);
         } else {
             if (begin_it == end_it)
-                return std::make_tuple(0, begin_it, UTF_ERROR::INCOMPLETE_SEQUENCE);
+                throw internal_decoding_16_error("Incomplete seqence", begin_it);
             else if (is_utf16_lead_surrogate(first_word)) {
                 const char16_t second_word = *it++;
                 if (is_utf16_trail_surrogate(second_word)) {
                     const char32_t code_point = (first_word << 10) + second_word + SURROGATE_OFFSET;
-                    return std::make_tuple(code_point, it, UTF_ERROR::OK);
+                    return std::make_tuple(code_point, it);
                 } else {
-                  return std::make_tuple(0, begin_it, UTF_ERROR::INCOMPLETE_SEQUENCE);
+                    throw internal_decoding_16_error("Incomplete seqence", begin_it);
                 }
             } else {
-              return std::make_tuple(0, begin_it, UTF_ERROR::INVALID_LEAD);
+                throw internal_decoding_16_error("Invalid lead", begin_it);
             }
         }
     }
 
-
-    UTF_ERROR encode_next_utf16(const char32_t code_point, std::u16string& utf16str) {
+    void encode_next_utf16(const char32_t code_point, std::u16string& utf16str) {
         if (!is_code_point_valid(code_point))
-            return UTF_ERROR::INVALID_CODE_POINT;
+            throw internal_encoding_16_error("Invalid code point", code_point);
         if (is_in_bmp(code_point))
             utf16str.append(1, static_cast<char16_t>(code_point));
         else {
@@ -206,7 +246,6 @@ namespace utfcpp::internal
             utf16str.append(1, static_cast<char16_t>(LEAD_OFFSET + (code_point >> 10)));
             utf16str.append(1, static_cast<char16_t>(TRAIL_SURROGATE_MIN + (code_point & 0x3FF)));
         }
-        return UTF_ERROR::OK;
     }
 
 } // namespace utfcpp::internal

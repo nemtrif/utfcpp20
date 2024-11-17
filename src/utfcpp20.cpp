@@ -18,15 +18,11 @@
 namespace utfcpp {
 
     void append_to_utf8(std::u8string& utf8string, char32_t code_point) {
-        const internal::UTF_ERROR status = internal::encode_next_utf8(code_point, utf8string);
-        if (status != internal::UTF_ERROR::OK)
-            throw encoding_error();
+        internal::encode_next_utf8(code_point, utf8string);
     }
 
     void append_to_utf16(std::u16string& utf16string, char32_t code_point) {
-        const internal::UTF_ERROR status = internal::encode_next_utf16(code_point, utf16string);
-        if (status != internal::UTF_ERROR::OK)
-            throw encoding_error();
+        internal::encode_next_utf16(code_point, utf16string);
     }
 
     std::u16string utf8_to_16(std::u8string_view utf8_string) {
@@ -35,9 +31,7 @@ namespace utfcpp {
         const size_t u16_length = internal::estimate16(utf8_string);
         ret16.reserve(u16_length);
         while (it != end_it) {
-            const auto [next32char, next_cp, status] = internal::decode_next_utf8(it, end_it);
-            if (status != internal::UTF_ERROR::OK)
-                throw decoding_error();
+            const auto [next32char, next_cp] = internal::decode_next_utf8(it, end_it);
             append_to_utf16(ret16, next32char);
             it = next_cp;
         }
@@ -50,9 +44,7 @@ namespace utfcpp {
         const size_t u8_length = internal::estimate8(utf16_string);
         ret8.reserve(u8_length);
         while(it != end_it) {
-            const auto [next32char, next_cp, status] = internal::decode_next_utf16(it, end_it);
-            if (status != internal::UTF_ERROR::OK)
-                throw decoding_error();
+            const auto [next32char, next_cp] = internal::decode_next_utf16(it, end_it);
             append_to_utf8(ret8, next32char);
             it = next_cp;
         }
@@ -76,25 +68,19 @@ namespace utfcpp {
     {}
 
     char32_t u8_iterator::operator * () const {
-        auto [code_point, ignore, status] = internal::decode_next_utf8(it, end_it);
-        if (status != internal::UTF_ERROR::OK)
-            throw decoding_error();
+        auto [code_point, ignore] = internal::decode_next_utf8(it, end_it);
         return code_point;
     }
 
     u8_iterator& u8_iterator::operator ++() {
-        auto [code_point, next_cp, status] = internal::decode_next_utf8(it, end_it);
-        if (status != internal::UTF_ERROR::OK)
-            throw decoding_error();
+        auto [code_point, next_cp] = internal::decode_next_utf8(it, end_it);
         it = next_cp;
         return *this;
     }
 
     u8_iterator u8_iterator::operator ++(int) {
         u8_iterator temp {*this};
-        auto [code_point, next_cp, status] = internal::decode_next_utf8(it, end_it);
-        if (status != internal::UTF_ERROR::OK)
-            throw decoding_error();
+        auto [code_point, next_cp] = internal::decode_next_utf8(it, end_it);
         it = next_cp;
         return temp;
     }

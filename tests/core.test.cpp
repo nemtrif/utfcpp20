@@ -93,22 +93,20 @@ TEST(CoreTests, test_decode_next_utf8)
     using namespace utfcpp::internal;
 
     const std::u8string_view ascii{u8"abcdxyz"};
-    auto [cp, next_cp, ok] = decode_next_utf8(ascii.begin(), ascii.end());
-    EXPECT_EQ(ok, UTF_ERROR::OK);
+    auto [cp, next_cp] = decode_next_utf8(ascii.begin(), ascii.end());
     EXPECT_EQ(cp, U'a');
     EXPECT_EQ(next_cp - ascii.begin(), 1);
 
     const std::u8string_view cyrillic{u8"шницла"}; // "steak"
-    std::tie(cp, next_cp, ok) = decode_next_utf8(cyrillic.begin(), cyrillic.end());
-    EXPECT_EQ(ok, UTF_ERROR::OK);
+    std::tie(cp, next_cp) = decode_next_utf8(cyrillic.begin(), cyrillic.end());
     EXPECT_EQ(cp, U'ш');
 
     const std::u8string_view chinese {u8"水手"}; // "sailor"
-    std::tie(cp, next_cp, ok) = decode_next_utf8(chinese.begin(), chinese.end());
+    std::tie(cp, next_cp) = decode_next_utf8(chinese.begin(), chinese.end());
     EXPECT_EQ(cp, U'水');
 
     const std::u8string_view etruscan {u8"𐌀"};
-    std::tie(cp, next_cp, ok) = decode_next_utf8(etruscan.begin(), etruscan.end());
+    std::tie(cp, next_cp) = decode_next_utf8(etruscan.begin(), etruscan.end());
     EXPECT_EQ(cp, U'𐌀');
 }
 
@@ -116,19 +114,19 @@ TEST(CoreTests, test_encode_next_utf8)
 {
     using namespace utfcpp::internal;
     std::u8string utf8str;
-    EXPECT_EQ(encode_next_utf8(U'a', utf8str), UTF_ERROR::OK);
+    encode_next_utf8(U'a', utf8str);
     EXPECT_EQ(utf8str, u8"a");
 
     utf8str.clear();
-    EXPECT_EQ(encode_next_utf8(U'ц', utf8str), UTF_ERROR::OK);
+    encode_next_utf8(U'ц', utf8str);
     EXPECT_EQ(utf8str, u8"ц");
 
     utf8str.clear();
-    EXPECT_EQ(encode_next_utf8(U'水', utf8str), UTF_ERROR::OK);
+    encode_next_utf8(U'水', utf8str);
     EXPECT_EQ(utf8str, u8"水");
 
     utf8str.clear();
-    EXPECT_EQ(encode_next_utf8(U'𐌀', utf8str), UTF_ERROR::OK);
+    encode_next_utf8(U'𐌀', utf8str);
     EXPECT_EQ(utf8str, u8"𐌀");
 }
 
@@ -137,18 +135,15 @@ TEST(CoreTests, test_decode_next_utf16)
     using namespace utfcpp::internal;
 
     std::u16string_view ascii{u"abcdxyz"};
-    auto [cp, next_cp, ok] = decode_next_utf16(ascii.begin(), ascii.end());
-    EXPECT_EQ(ok, UTF_ERROR::OK);
+    auto [cp, next_cp] = decode_next_utf16(ascii.begin(), ascii.end());
     EXPECT_EQ(cp, U'a');
 
     std::u16string_view cyrillic {u"шницла"}; // "steak"
-    std::tie(cp, next_cp, ok) = decode_next_utf16(cyrillic.begin(), cyrillic.end());
-    EXPECT_EQ(ok, UTF_ERROR::OK);
+    std::tie(cp, next_cp) = decode_next_utf16(cyrillic.begin(), cyrillic.end());
     EXPECT_EQ(cp, U'ш');
 
     std::u16string_view etruscan {u"𐌀"};
-    std::tie(cp, next_cp, ok) = decode_next_utf16(etruscan.begin(), etruscan.end());
-    EXPECT_EQ(ok, UTF_ERROR::OK);
+    std::tie(cp, next_cp) = decode_next_utf16(etruscan.begin(), etruscan.end());
     EXPECT_EQ(cp, U'𐌀');
     EXPECT_EQ(next_cp, etruscan.end());
 }
@@ -177,4 +172,3 @@ TEST(CoreTests, test_estimate8)
     EXPECT_EQ(estimate8(u"水手"), 6);
     EXPECT_EQ(estimate8(u"𐌀"), 4);
 }
-
