@@ -17,6 +17,8 @@
 
 namespace utfcpp::internal
 {
+    using u8_diff_type = std::u8string_view::difference_type;
+
     class internal_decoding_8_error : public decoding_error {
     public:
         internal_decoding_8_error(const char* msg, std::u8string_view::iterator pos) :
@@ -84,7 +86,7 @@ namespace utfcpp::internal
     }
 
 
-    static constexpr bool is_overlong_sequence(const char32_t cp, const std::size_t length) {
+    static constexpr bool is_overlong_sequence(const char32_t cp, const u8_diff_type length) {
         if (cp < 0x80) {
             if (length != 1) 
                 return true;
@@ -98,7 +100,7 @@ namespace utfcpp::internal
         return false;
     }
 
-    static constexpr std::u8string_view::difference_type
+    static constexpr u8_diff_type
     utf8_cp_length(char8_t lead_byte) {
         if (lead_byte < 0x80)               return 1;
         else if ((lead_byte >> 5) == 0x6)   return 2;
@@ -137,14 +139,14 @@ namespace utfcpp::internal
 
     std::tuple<char32_t, std::u8string_view::iterator>
     decode_next_utf8(std::u8string_view::iterator begin_it, std::u8string_view::iterator end_it) {
-        const std::u8string_view::difference_type max_length = end_it - begin_it;
+        const u8_diff_type max_length = end_it - begin_it;
         if (max_length < 1)
             throw internal_decoding_8_error("Incomplete sequence", begin_it);
 
         // Actual decoding
         char32_t code_point{0};
         auto it{begin_it};
-        const std::u8string_view::difference_type length{utf8_cp_length(*it)};
+        const u8_diff_type length{utf8_cp_length(*it)};
         if (length > max_length)
             throw internal_decoding_8_error("Incomplete sequence", begin_it);
         switch (length) {
@@ -225,7 +227,7 @@ namespace utfcpp::internal
             else if (is_utf16_lead_surrogate(first_word)) {
                 const char16_t second_word = *it++;
                 if (is_utf16_trail_surrogate(second_word)) {
-                    const char32_t code_point = (first_word << 10) + second_word + SURROGATE_OFFSET;
+                    const char32_t code_point = static_cast<char16_t>(first_word << 10) + second_word + SURROGATE_OFFSET;
                     return std::make_tuple(code_point, it);
                 } else {
                     throw internal_decoding_16_error("Incomplete seqence", begin_it);
