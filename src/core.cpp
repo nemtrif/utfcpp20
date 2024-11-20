@@ -228,7 +228,7 @@ namespace utfcpp::internal
             else if (is_utf16_lead_surrogate(first_word)) {
                 const char16_t second_word = *it++;
                 if (is_utf16_trail_surrogate(second_word)) {
-                    const char32_t code_point = static_cast<char16_t>(first_word << 10) + second_word + SURROGATE_OFFSET;
+                    const char32_t code_point = static_cast<char32_t>(first_word << 10) + second_word + SURROGATE_OFFSET;
                     return std::make_tuple(code_point, it);
                 } else {
                     throw internal_decoding_16_error("Incomplete seqence");
