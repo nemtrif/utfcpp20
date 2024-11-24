@@ -17,7 +17,6 @@
 
 #include <string_view>
 #include <string>
-#include <tuple>
 #include <cstddef> // std::size_t
 
 namespace utfcpp::internal
@@ -39,26 +38,27 @@ namespace utfcpp::internal
     // Replacement character
     constexpr char32_t REPLACEMENT_CHARACTER {U'\ufffd'};
 
-    bool is_utf8_trail(char8_t ch);
+    // Is the byte a utf-8 trail?
+    constexpr bool is_utf8_trail(char8_t ch);
 
-    bool is_utf16_lead_surrogate(char16_t cp);
-    bool is_utf16_trail_surrogate(char16_t cp);
-    bool is_utf16_surrogate(char32_t cp);
+    // Detect UTF-16 surrogate code units
+    constexpr bool is_utf16_lead_surrogate(char16_t cp);
+    constexpr bool is_utf16_trail_surrogate(char16_t cp);
+    constexpr bool is_utf16_surrogate(char32_t cp);
 
-    bool is_code_point_valid(char32_t cp);
+    // Checks that the code point is in allowed range
+    constexpr bool is_code_point_valid(char32_t cp);
 
+    // Helpers for resizing strings before converting between encoding forms
+    size_t estimate8(std::u16string_view utf16str);
     size_t estimate16(std::u8string_view utf8str);
 
-    size_t estimate8(std::u16string_view utf16str);
+    // Decoding functions
+    char32_t decode_next_utf8(std::u8string_view::iterator& it, std::u8string_view::iterator end_it);
+    char32_t decode_next_utf16(std::u16string_view::iterator& it, std::u16string_view::iterator end_it);
 
-    std::tuple<char32_t, std::u8string_view::iterator>
-    decode_next_utf8(std::u8string_view::iterator begin_it, std::u8string_view::iterator end_it);
-    
+    // Encoding functions
     void encode_next_utf8(const char32_t code_point, std::u8string& utf8str);
-
-    std::tuple<char32_t, std::u16string_view::iterator>
-    decode_next_utf16(std::u16string_view::iterator begin_it, std::u16string_view::iterator end_it);
-    
     void encode_next_utf16(const char32_t code_point, std::u16string& utf16str);
 
 }  // namespace utfcpp::internal
