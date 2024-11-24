@@ -19,7 +19,7 @@ namespace utfcpp::internal
 {
     using u8_diff_type = std::u8string_view::difference_type;
 
-    class internal_decoding_8_error : public decoding_error {
+    class internal_decoding_8_error : public utfcpp::exception {
     public:
         internal_decoding_8_error(const char* msg) :
             message(msg)
@@ -30,7 +30,7 @@ namespace utfcpp::internal
         std::string message;
     };
 
-    class internal_decoding_16_error : public decoding_error {
+    class internal_decoding_16_error : public utfcpp::exception {
     public:
         internal_decoding_16_error(const char* msg) :
             message(msg)
@@ -41,7 +41,7 @@ namespace utfcpp::internal
         std::string message;
     };
 
-    class internal_encoding_8_error : public encoding_error {
+    class internal_encoding_8_error : public utfcpp::exception {
     public:
         internal_encoding_8_error(const char* msg) :
             message(msg)
@@ -52,7 +52,7 @@ namespace utfcpp::internal
         std::string message;
     };
 
-    class internal_encoding_16_error : public encoding_error {
+    class internal_encoding_16_error : public utfcpp::exception {
     public:
         internal_encoding_16_error(const char* msg) :
             message(msg)

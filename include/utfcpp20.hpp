@@ -21,12 +21,8 @@
 namespace utfcpp {
     // Base for the exceptions that may be thrown from the library
     class exception : public ::std::exception {
-    };
-
-    class encoding_error : public utfcpp::exception {
-    };
-
-    class decoding_error : public utfcpp::exception {
+    public:
+        const char* what() const noexcept override;
     };
 
     void append_to_utf8(std::u8string& utf8string, char32_t code_point);

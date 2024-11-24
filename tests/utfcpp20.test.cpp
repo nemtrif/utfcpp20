@@ -47,7 +47,7 @@ TEST(UtfTests, test_utf8_to_16)
     // \xfa is invalid (unexpected continuation byte)
     const char utf8_invalid[] = "\xe6\x97\xa5\xd1\x88\xfa";
     std::u8string_view invalid_view(reinterpret_cast<const char8_t*>(utf8_invalid), strlen(utf8_invalid));
-    EXPECT_THROW(utf8_to_16(invalid_view), decoding_error);
+    EXPECT_THROW(utf8_to_16(invalid_view), utfcpp::exception);
 }
 
 TEST(UtfTests, test_utf16_to_8)
@@ -58,7 +58,7 @@ TEST(UtfTests, test_utf16_to_8)
     // 0xdd1e is invalid (unexpected tail surrogate)
     const char16_t utf16_invalid[] = {0x41, 0x0448, 0x65e5, 0xdd1e};
     std::u16string_view invalid_view(reinterpret_cast<const char16_t*>(utf16_invalid), 4);
-    EXPECT_THROW(utf16_to_8(invalid_view), decoding_error);
+    EXPECT_THROW(utf16_to_8(invalid_view), utfcpp::exception);
 }
 
 TEST(u8_iteratorTests, test_iterator_construction)

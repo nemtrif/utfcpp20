@@ -16,6 +16,9 @@
 #include "core.hpp"
 
 namespace utfcpp {
+    const char* exception::what() const noexcept {
+        return "Error from utfcpp20 library";
+    }
 
     void append_to_utf8(std::u8string& utf8string, char32_t code_point) {
         internal::encode_next_utf8(code_point, utf8string);
