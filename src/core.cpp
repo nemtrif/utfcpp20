@@ -61,33 +61,40 @@ namespace utfcpp::internal
         std::string message;
     };
 
-
-    constexpr bool is_utf8_trail(char8_t ch) {
+    // Is the byte a utf-8 trail?
+    static constexpr bool 
+    is_utf8_trail(char8_t ch) {
         return ((ch >> 6) == 0x2);
     }
 
-    constexpr bool is_utf16_lead_surrogate(char16_t cp) {
+    static constexpr bool 
+    is_utf16_lead_surrogate(char16_t cp) {
         return (cp >= LEAD_SURROGATE_MIN && cp <= LEAD_SURROGATE_MAX);
     }
 
-    constexpr bool is_utf16_trail_surrogate(char16_t cp) {
+    static constexpr bool
+    is_utf16_trail_surrogate(char16_t cp) {
         return (cp >= TRAIL_SURROGATE_MIN && cp <= TRAIL_SURROGATE_MAX);
     }
 
-    constexpr bool is_utf16_surrogate(char32_t cp) {
+    static constexpr bool 
+    is_utf16_surrogate(char32_t cp) {
         return (cp >= LEAD_SURROGATE_MIN && cp <= TRAIL_SURROGATE_MAX);
     }
 
-    constexpr bool is_code_point_valid(char32_t cp) {
+    static constexpr bool
+    is_code_point_valid(char32_t cp) {
         return (cp <= CODE_POINT_MAX && !is_utf16_surrogate(cp));
     }
 
-    static constexpr bool is_in_bmp(char32_t cp) {
+    static constexpr bool
+    is_in_bmp(char32_t cp) {
         return cp < U'\U00010000';
     }
 
 
-    static constexpr bool is_overlong_sequence(const char32_t cp, const u8_diff_type length) {
+    static constexpr bool
+    is_overlong_sequence(const char32_t cp, const u8_diff_type length) {
         if (cp < 0x80) {
             if (length != 1) 
                 return true;

@@ -38,17 +38,6 @@ namespace utfcpp::internal
     // Replacement character
     constexpr char32_t REPLACEMENT_CHARACTER {U'\ufffd'};
 
-    // Is the byte a utf-8 trail?
-    constexpr bool is_utf8_trail(char8_t ch);
-
-    // Detect UTF-16 surrogate code units
-    constexpr bool is_utf16_lead_surrogate(char16_t cp);
-    constexpr bool is_utf16_trail_surrogate(char16_t cp);
-    constexpr bool is_utf16_surrogate(char32_t cp);
-
-    // Checks that the code point is in allowed range
-    constexpr bool is_code_point_valid(char32_t cp);
-
     // Helpers for resizing strings before converting between encoding forms
     size_t estimate8(std::u16string_view utf16str);
     size_t estimate16(std::u8string_view utf8str);
