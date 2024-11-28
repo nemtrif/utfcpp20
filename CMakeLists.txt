@@ -16,7 +16,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(
   utfcpp20
-  VERSION 0.1
+  VERSION 0.2
   DESCRIPTION "A C++ 20 library for working with Unicode strings"
   LANGUAGES CXX)
 
