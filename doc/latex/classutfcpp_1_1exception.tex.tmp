@@ -1,0 +1,52 @@
+\doxysection{utfcpp\+::exception Class Reference}
+\hypertarget{classutfcpp_1_1exception}{}\label{classutfcpp_1_1exception}\index{utfcpp::exception@{utfcpp::exception}}
+
+
+Base class for the exceptions that may be thrown from the library.  
+
+
+
+
+{\ttfamily \#include $<$utfcpp20.\+hpp$>$}
+
+
+
+Inheritance diagram for utfcpp\+::exception\+:
+% FIG 0
+
+
+Collaboration diagram for utfcpp\+::exception\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classutfcpp_1_1exception_a37c555b5d0ead8e0c3f4d088228a32bc}{what}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns the description string. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Base class for the exceptions that may be thrown from the library. 
+
+All encoding/decoding errors will result in an exception of this type. Use {\ttfamily what} function to get a description. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classutfcpp_1_1exception_a37c555b5d0ead8e0c3f4d088228a32bc}\label{classutfcpp_1_1exception_a37c555b5d0ead8e0c3f4d088228a32bc} 
+\index{utfcpp::exception@{utfcpp::exception}!what@{what}}
+\index{what@{what}!utfcpp::exception@{utfcpp::exception}}
+\doxysubsubsection{\texorpdfstring{what()}{what()}}
+{\footnotesize\ttfamily const char \texorpdfstring{$\ast$}{*} utfcpp\+::exception\+::what (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the description string. 
+
+The null-\/terminated string with the description of the error that caused the exception.
+
+\begin{DoxyReturn}{Returns}
+Pointer to a C-\/style string with the description of the error. The memory is owned by the exception object. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{utfcpp20_8hpp}{utfcpp20.\+hpp}}\end{DoxyCompactItemize}

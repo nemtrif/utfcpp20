@@ -1,0 +1,29 @@
+\doxysection{include/utfcpp20.hpp File Reference}
+\hypertarget{utfcpp20_8hpp}{}\label{utfcpp20_8hpp}\index{include/utfcpp20.hpp@{include/utfcpp20.hpp}}
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$string\+\_\+view$>$}\newline
+Include dependency graph for utfcpp20.\+hpp\+:
+% FIG 0
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classutfcpp_1_1exception}{utfcpp\+::exception}}
+\begin{DoxyCompactList}\small\item\em Base class for the exceptions that may be thrown from the library. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{utfcpp\+::u8\+\_\+iterator}}
+\begin{DoxyCompactList}\small\item\em Class for iterating over a UTF-\/8 encoded string. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespaceutfcpp}{utfcpp}}
+\begin{DoxyCompactList}\small\item\em Namespace for the utfcpp20 library. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{namespaceutfcpp_a1ac0219950ec270093adbe5789cc506e}{utfcpp\+::append\+\_\+to\+\_\+utf8}} (std\+::u8string \&utf8string, char32\+\_\+t code\+\_\+point)
+\begin{DoxyCompactList}\small\item\em Appends a code point to a UTF-\/8 string. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespaceutfcpp_aace3fc217d6fcf1c919090b957a43e89}{utfcpp\+::append\+\_\+to\+\_\+utf16}} (std\+::u16string \&utf16string, char32\+\_\+t code\+\_\+point)
+\begin{DoxyCompactList}\small\item\em Appends a code point to a UTF-\/16 string. \end{DoxyCompactList}\item 
+std\+::u16string \mbox{\hyperlink{namespaceutfcpp_aee557a14e557c50060bcabc230e3d62f}{utfcpp\+::utf8\+\_\+to\+\_\+16}} (std\+::u8string\+\_\+view utf8\+\_\+string)
+\begin{DoxyCompactList}\small\item\em Converts a UTF-\/8 encoded string to UTF-\/16. \end{DoxyCompactList}\item 
+std\+::u8string \mbox{\hyperlink{namespaceutfcpp_aa311fe7623022881a5e88e79a7f196e5}{utfcpp\+::utf16\+\_\+to\+\_\+8}} (std\+::u16string\+\_\+view utf16\+\_\+string)
+\begin{DoxyCompactList}\small\item\em Converts a UTF-\/16 encoded string to UTF-\/8. \end{DoxyCompactList}\end{DoxyCompactItemize}

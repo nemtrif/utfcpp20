@@ -1,0 +1,165 @@
+\doxysection{utfcpp\+::u8\+\_\+iterator Class Reference}
+\hypertarget{classutfcpp_1_1u8__iterator}{}\label{classutfcpp_1_1u8__iterator}\index{utfcpp::u8\_iterator@{utfcpp::u8\_iterator}}
+
+
+Class for iterating over a UTF-\/8 encoded string.  
+
+
+
+
+{\ttfamily \#include $<$utfcpp20.\+hpp$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classutfcpp_1_1u8__iterator_ab5b78a016c8d79fbed14756237cff96c}\label{classutfcpp_1_1u8__iterator_ab5b78a016c8d79fbed14756237cff96c} 
+using {\bfseries value\+\_\+type} = char32\+\_\+t
+\item 
+\Hypertarget{classutfcpp_1_1u8__iterator_a2a927d66fad03f250dbd7fdcfc24ad50}\label{classutfcpp_1_1u8__iterator_a2a927d66fad03f250dbd7fdcfc24ad50} 
+using {\bfseries pointer} = char32\+\_\+t \texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classutfcpp_1_1u8__iterator_ae84ff0531551b35934825d04ce441043}\label{classutfcpp_1_1u8__iterator_ae84ff0531551b35934825d04ce441043} 
+using {\bfseries reference} = char32\+\_\+t \&
+\item 
+\Hypertarget{classutfcpp_1_1u8__iterator_acee4a40f3240554365a3a4334f392972}\label{classutfcpp_1_1u8__iterator_acee4a40f3240554365a3a4334f392972} 
+using {\bfseries difference\+\_\+type} = std\+::ptrdiff\+\_\+t
+\item 
+\Hypertarget{classutfcpp_1_1u8__iterator_a2aab5407945bdab881ee8d7270b730b9}\label{classutfcpp_1_1u8__iterator_a2aab5407945bdab881ee8d7270b730b9} 
+using {\bfseries iterator\+\_\+category} = std\+::input\+\_\+iterator\+\_\+tag
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+char32\+\_\+t \mbox{\hyperlink{classutfcpp_1_1u8__iterator_a402552775d0cb81e3c75c12c645d68a9}{operator\texorpdfstring{$\ast$}{*}}} () const
+\begin{DoxyCompactList}\small\item\em Decodes the next utf-\/8 sequence. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classutfcpp_1_1u8__iterator_a9cc6b8b52499e612545e5cc014d08b24}{operator$<$=$>$}} (const \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} \&) const =default
+\begin{DoxyCompactList}\small\item\em The three way comparison operator. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} \& \mbox{\hyperlink{classutfcpp_1_1u8__iterator_aa8146896bfde36069cdc29db12bf44c1}{operator++}} ()
+\begin{DoxyCompactList}\small\item\em The prefix increment. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} \mbox{\hyperlink{classutfcpp_1_1u8__iterator_a620502bcdf313edd017711e4ba7bafcb}{operator++}} (int)
+\begin{DoxyCompactList}\small\item\em The postfix increment. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} \mbox{\hyperlink{classutfcpp_1_1u8__iterator_a957887d111dc6407066d38527947416c}{begin}} (std\+::u8string\+\_\+view str\+\_\+view)
+\begin{DoxyCompactList}\small\item\em Returns a {\ttfamily \doxylink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} to the beginning of the given UTF-\/8 string view. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} \mbox{\hyperlink{classutfcpp_1_1u8__iterator_ae7b509fdeb6927ddab4801b4a764259e}{end}} (std\+::u8string\+\_\+view str\+\_\+view)
+\begin{DoxyCompactList}\small\item\em Returns a {\ttfamily \doxylink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} to the end of the given UTF-\/8 string view. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class for iterating over a UTF-\/8 encoded string. 
+
+The class is an input iterator that holds references to the current position and end of the UTF-\/8 encoded sequence. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classutfcpp_1_1u8__iterator_a957887d111dc6407066d38527947416c}\label{classutfcpp_1_1u8__iterator_a957887d111dc6407066d38527947416c} 
+\index{utfcpp::u8\_iterator@{utfcpp::u8\_iterator}!begin@{begin}}
+\index{begin@{begin}!utfcpp::u8\_iterator@{utfcpp::u8\_iterator}}
+\doxysubsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} utfcpp\+::u8\+\_\+iterator\+::begin (\begin{DoxyParamCaption}\item[{std\+::u8string\+\_\+view}]{str\+\_\+view }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Returns a {\ttfamily \doxylink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} to the beginning of the given UTF-\/8 string view. 
+
+Given a {\ttfamily std\+::u8string\+\_\+view} object, constructs {\ttfamily \doxylink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} to its beginning.
+
+
+\begin{DoxyParams}{Parameters}
+{\em str\+\_\+view} & A string view referencing a UTF-\/8 encoded string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily \doxylink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} pointing to the beginning of the sequence 
+\end{DoxyReturn}
+\Hypertarget{classutfcpp_1_1u8__iterator_ae7b509fdeb6927ddab4801b4a764259e}\label{classutfcpp_1_1u8__iterator_ae7b509fdeb6927ddab4801b4a764259e} 
+\index{utfcpp::u8\_iterator@{utfcpp::u8\_iterator}!end@{end}}
+\index{end@{end}!utfcpp::u8\_iterator@{utfcpp::u8\_iterator}}
+\doxysubsubsection{\texorpdfstring{end()}{end()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} utfcpp\+::u8\+\_\+iterator\+::end (\begin{DoxyParamCaption}\item[{std\+::u8string\+\_\+view}]{str\+\_\+view }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Returns a {\ttfamily \doxylink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} to the end of the given UTF-\/8 string view. 
+
+Given a {\ttfamily std\+::u8string\+\_\+view} object, constructs {\ttfamily \doxylink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} to its end.
+
+
+\begin{DoxyParams}{Parameters}
+{\em str\+\_\+view} & A string view referencing a UTF-\/8 encoded string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily \doxylink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} pointing to the end of the sequence 
+\end{DoxyReturn}
+\Hypertarget{classutfcpp_1_1u8__iterator_a402552775d0cb81e3c75c12c645d68a9}\label{classutfcpp_1_1u8__iterator_a402552775d0cb81e3c75c12c645d68a9} 
+\index{utfcpp::u8\_iterator@{utfcpp::u8\_iterator}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}}
+\index{operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}!utfcpp::u8\_iterator@{utfcpp::u8\_iterator}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}()}{operator*()}}
+{\footnotesize\ttfamily char32\+\_\+t utfcpp\+::u8\+\_\+iterator\+::operator\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Decodes the next utf-\/8 sequence. 
+
+Decodes the sequence the iterator is currently pointing to.
+
+\begin{DoxyReturn}{Returns}
+The code point of the current UTF-\/8 sequence. 
+\end{DoxyReturn}
+\Hypertarget{classutfcpp_1_1u8__iterator_aa8146896bfde36069cdc29db12bf44c1}\label{classutfcpp_1_1u8__iterator_aa8146896bfde36069cdc29db12bf44c1} 
+\index{utfcpp::u8\_iterator@{utfcpp::u8\_iterator}!operator++@{operator++}}
+\index{operator++@{operator++}!utfcpp::u8\_iterator@{utfcpp::u8\_iterator}}
+\doxysubsubsection{\texorpdfstring{operator++()}{operator++()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} \& utfcpp\+::u8\+\_\+iterator\+::operator++ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+The prefix increment. 
+
+Increments the iterator to point to the next code point.
+
+\begin{DoxyReturn}{Returns}
+Reference to the incremented iterator. 
+\end{DoxyReturn}
+\Hypertarget{classutfcpp_1_1u8__iterator_a620502bcdf313edd017711e4ba7bafcb}\label{classutfcpp_1_1u8__iterator_a620502bcdf313edd017711e4ba7bafcb} 
+\index{utfcpp::u8\_iterator@{utfcpp::u8\_iterator}!operator++@{operator++}}
+\index{operator++@{operator++}!utfcpp::u8\_iterator@{utfcpp::u8\_iterator}}
+\doxysubsubsection{\texorpdfstring{operator++()}{operator++()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} utfcpp\+::u8\+\_\+iterator\+::operator++ (\begin{DoxyParamCaption}\item[{int}]{ }\end{DoxyParamCaption})}
+
+
+
+The postfix increment. 
+
+Increments the iterator to point to the next code point and returns the current one.
+
+\begin{DoxyReturn}{Returns}
+The original value of the iterator. 
+\end{DoxyReturn}
+\Hypertarget{classutfcpp_1_1u8__iterator_a9cc6b8b52499e612545e5cc014d08b24}\label{classutfcpp_1_1u8__iterator_a9cc6b8b52499e612545e5cc014d08b24} 
+\index{utfcpp::u8\_iterator@{utfcpp::u8\_iterator}!operator$<$=$>$@{operator$<$=$>$}}
+\index{operator$<$=$>$@{operator$<$=$>$}!utfcpp::u8\_iterator@{utfcpp::u8\_iterator}}
+\doxysubsubsection{\texorpdfstring{operator$<$=$>$()}{operator<=>()}}
+{\footnotesize\ttfamily auto utfcpp\+::u8\+\_\+iterator\+::operator$<$=$>$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} \&}]{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+The three way comparison operator. 
+
+Compares two {\ttfamily \doxylink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}} objects.
+
+
+\begin{DoxyParams}{Parameters}
+{\em it} & An iterator to compare with. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zero if the two iterators are equal. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{utfcpp20_8hpp}{utfcpp20.\+hpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,111 @@
+\doxysection{utfcpp Namespace Reference}
+\hypertarget{namespaceutfcpp}{}\label{namespaceutfcpp}\index{utfcpp@{utfcpp}}
+
+
+Namespace for the utfcpp20 library.  
+
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classutfcpp_1_1exception}{exception}}
+\begin{DoxyCompactList}\small\item\em Base class for the exceptions that may be thrown from the library. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\+\_\+iterator}}
+\begin{DoxyCompactList}\small\item\em Class for iterating over a UTF-\/8 encoded string. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{namespaceutfcpp_a1ac0219950ec270093adbe5789cc506e}{append\+\_\+to\+\_\+utf8}} (std\+::u8string \&utf8string, char32\+\_\+t code\+\_\+point)
+\begin{DoxyCompactList}\small\item\em Appends a code point to a UTF-\/8 string. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespaceutfcpp_aace3fc217d6fcf1c919090b957a43e89}{append\+\_\+to\+\_\+utf16}} (std\+::u16string \&utf16string, char32\+\_\+t code\+\_\+point)
+\begin{DoxyCompactList}\small\item\em Appends a code point to a UTF-\/16 string. \end{DoxyCompactList}\item 
+std\+::u16string \mbox{\hyperlink{namespaceutfcpp_aee557a14e557c50060bcabc230e3d62f}{utf8\+\_\+to\+\_\+16}} (std\+::u8string\+\_\+view utf8\+\_\+string)
+\begin{DoxyCompactList}\small\item\em Converts a UTF-\/8 encoded string to UTF-\/16. \end{DoxyCompactList}\item 
+std\+::u8string \mbox{\hyperlink{namespaceutfcpp_aa311fe7623022881a5e88e79a7f196e5}{utf16\+\_\+to\+\_\+8}} (std\+::u16string\+\_\+view utf16\+\_\+string)
+\begin{DoxyCompactList}\small\item\em Converts a UTF-\/16 encoded string to UTF-\/8. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Namespace for the utfcpp20 library. 
+
+The entire API is within this namespace. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{namespaceutfcpp_aace3fc217d6fcf1c919090b957a43e89}\label{namespaceutfcpp_aace3fc217d6fcf1c919090b957a43e89} 
+\index{utfcpp@{utfcpp}!append\_to\_utf16@{append\_to\_utf16}}
+\index{append\_to\_utf16@{append\_to\_utf16}!utfcpp@{utfcpp}}
+\doxysubsubsection{\texorpdfstring{append\_to\_utf16()}{append\_to\_utf16()}}
+{\footnotesize\ttfamily void utfcpp\+::append\+\_\+to\+\_\+utf16 (\begin{DoxyParamCaption}\item[{std\+::u16string \&}]{utf16string,  }\item[{char32\+\_\+t}]{code\+\_\+point }\end{DoxyParamCaption})}
+
+
+
+Appends a code point to a UTF-\/16 string. 
+
+Encodes the code pont as UTF-\/16 and appends it to the UTF-\/16 string.
+
+
+\begin{DoxyParams}{Parameters}
+{\em utf16string} & A UTF-\/16 encoded string to which a new code point will be appended. \\
+\hline
+{\em code\+\_\+point} & Code point to encode as UTF-\/16 and append to the string. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{namespaceutfcpp_a1ac0219950ec270093adbe5789cc506e}\label{namespaceutfcpp_a1ac0219950ec270093adbe5789cc506e} 
+\index{utfcpp@{utfcpp}!append\_to\_utf8@{append\_to\_utf8}}
+\index{append\_to\_utf8@{append\_to\_utf8}!utfcpp@{utfcpp}}
+\doxysubsubsection{\texorpdfstring{append\_to\_utf8()}{append\_to\_utf8()}}
+{\footnotesize\ttfamily void utfcpp\+::append\+\_\+to\+\_\+utf8 (\begin{DoxyParamCaption}\item[{std\+::u8string \&}]{utf8string,  }\item[{char32\+\_\+t}]{code\+\_\+point }\end{DoxyParamCaption})}
+
+
+
+Appends a code point to a UTF-\/8 string. 
+
+Encodes the code pont as UTF-\/8 and appends it to the UTF-\/8 string.
+
+
+\begin{DoxyParams}{Parameters}
+{\em utf8string} & A UTF-\/8 encoded string to which a new code point will be appended. \\
+\hline
+{\em code\+\_\+point} & Code point to encode as UTF-\/8 and append to the string. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{namespaceutfcpp_aa311fe7623022881a5e88e79a7f196e5}\label{namespaceutfcpp_aa311fe7623022881a5e88e79a7f196e5} 
+\index{utfcpp@{utfcpp}!utf16\_to\_8@{utf16\_to\_8}}
+\index{utf16\_to\_8@{utf16\_to\_8}!utfcpp@{utfcpp}}
+\doxysubsubsection{\texorpdfstring{utf16\_to\_8()}{utf16\_to\_8()}}
+{\footnotesize\ttfamily std\+::u8string utfcpp\+::utf16\+\_\+to\+\_\+8 (\begin{DoxyParamCaption}\item[{std\+::u16string\+\_\+view}]{utf16\+\_\+string }\end{DoxyParamCaption})}
+
+
+
+Converts a UTF-\/16 encoded string to UTF-\/8. 
+
+Decodes a UTF-\/16 string and encodes its content as UTF-\/8.
+
+
+\begin{DoxyParams}{Parameters}
+{\em utf16\+\_\+string} & A view to a UTF-\/8 encoded string to convert to UTF-\/16. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A UTF-\/16 encoded string. 
+\end{DoxyReturn}
+\Hypertarget{namespaceutfcpp_aee557a14e557c50060bcabc230e3d62f}\label{namespaceutfcpp_aee557a14e557c50060bcabc230e3d62f} 
+\index{utfcpp@{utfcpp}!utf8\_to\_16@{utf8\_to\_16}}
+\index{utf8\_to\_16@{utf8\_to\_16}!utfcpp@{utfcpp}}
+\doxysubsubsection{\texorpdfstring{utf8\_to\_16()}{utf8\_to\_16()}}
+{\footnotesize\ttfamily std\+::u16string utfcpp\+::utf8\+\_\+to\+\_\+16 (\begin{DoxyParamCaption}\item[{std\+::u8string\+\_\+view}]{utf8\+\_\+string }\end{DoxyParamCaption})}
+
+
+
+Converts a UTF-\/8 encoded string to UTF-\/16. 
+
+Decodes a UTF-\/8 string and encodes its content as UTF-\/16.
+
+
+\begin{DoxyParams}{Parameters}
+{\em utf8\+\_\+string} & A view to a UTF-\/8 encoded string to convert to UTF-\/16. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A UTF-\/16 encoded string. 
+\end{DoxyReturn}

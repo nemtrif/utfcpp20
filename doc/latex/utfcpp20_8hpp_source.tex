@@ -1,0 +1,64 @@
+\doxysection{utfcpp20.\+hpp}
+\hypertarget{utfcpp20_8hpp_source}{}\label{utfcpp20_8hpp_source}\index{include/utfcpp20.hpp@{include/utfcpp20.hpp}}
+\mbox{\hyperlink{utfcpp20_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ \ \ \ Copyright\ 2024\ Nemanja\ Trifunovic}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ \ \ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0\ (the\ "{}License"{});}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ \ \ \ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ \ \ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ \ \ \ \ \ \ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ \ \ \ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ \ \ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \ \ \ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ \ \ \ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ \ \ \ limitations\ under\ the\ License.}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#ifndef\ uftcpp20\_H\_de558932\_1371\_4b17\_a2e1\_ceaad0fcb1cd}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ uftcpp20\_H\_de558932\_1371\_4b17\_a2e1\_ceaad0fcb1cd}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <string\_view>}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceutfcpp}{utfcpp}}\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classutfcpp_1_1exception}{exception}}\ :\ \textcolor{keyword}{public}\ ::std::exception\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{classutfcpp_1_1exception_a37c555b5d0ead8e0c3f4d088228a32bc}{what}}()\ const\ noexcept\ override;}
+\DoxyCodeLine{00044\ \ \ \ \ \};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespaceutfcpp_a1ac0219950ec270093adbe5789cc506e}{append\_to\_utf8}}(std::u8string\&\ utf8string,\ \textcolor{keywordtype}{char32\_t}\ code\_point);}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespaceutfcpp_aace3fc217d6fcf1c919090b957a43e89}{append\_to\_utf16}}(std::u16string\&\ utf16string,\ \textcolor{keywordtype}{char32\_t}\ code\_point);}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00074\ \ \ \ \ std::u16string\ \mbox{\hyperlink{namespaceutfcpp_aee557a14e557c50060bcabc230e3d62f}{utf8\_to\_16}}(std::u8string\_view\ utf8\_string);}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00084\ \ \ \ \ std::u8string\ \ \mbox{\hyperlink{namespaceutfcpp_aa311fe7623022881a5e88e79a7f196e5}{utf16\_to\_8}}(std::u16string\_view\ utf16\_string);}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00094\ \ \ \ \ class\ \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\_iterator}}\ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }value\_type\ \ \ \ \ \ \ \ =\ char32\_t;}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }pointer\ \ \ \ \ \ \ \ \ \ \ =\ \textcolor{keywordtype}{char32\_t}*;}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }reference\ \ \ \ \ \ \ \ \ =\ \textcolor{keywordtype}{char32\_t}\&;}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }difference\_type\ \ \ =\ std::ptrdiff\_t;}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }iterator\_category\ =\ std::input\_iterator\_tag;}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\_iterator}}\ \mbox{\hyperlink{classutfcpp_1_1u8__iterator_a957887d111dc6407066d38527947416c}{begin}}(std::u8string\_view\ str\_view);}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\_iterator}}\ \mbox{\hyperlink{classutfcpp_1_1u8__iterator_ae7b509fdeb6927ddab4801b4a764259e}{end}}(std::u8string\_view\ str\_view);}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char32\_t}\ operator\ *()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ operator\ <=>(\textcolor{keyword}{const}\ \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\_iterator}}\&)\ \textcolor{keyword}{const}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\_iterator}}\&\ operator\ ++();}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\_iterator}}\ \ operator\ ++(\textcolor{keywordtype}{int});}
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classutfcpp_1_1u8__iterator}{u8\_iterator}}(std::u8string\_view::iterator\ begin,}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::u8string\_view::iterator\ end);}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ std::u8string\_view::iterator\ it;}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ std::u8string\_view::iterator\ end\_it;}
+\DoxyCodeLine{00158\ \ \ \ \ \};}
+\DoxyCodeLine{00159\ \}\ \textcolor{comment}{//\ namespace\ utfcpp20}}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ uftcpp20\_H\_de558932\_1371\_4b17\_a2e1\_ceaad0fcb1cd}}
+
+\end{DoxyCode}
