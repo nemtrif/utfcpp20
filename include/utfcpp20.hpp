@@ -18,8 +18,10 @@
 #include <string>
 #include <string_view>
 
-/**
- * \namespace utfcpp
+/** 
+ * \brief Namespace for the utfcpp20 library
+ * 
+ * The entire API is within this namespace.
  */
 namespace utfcpp {
 /**
