@@ -1,6 +1,6 @@
 # utfcpp20
 
-This is a simplified and incomplete version of the [utfcpp](https://github.com/nemtrif/utfcpp) library. utfcpp was initially developed in 2006 when the current standard was C++03 and although I added some modern C++ features on top of it as an option, I wandered how the library would look like if I could start with C++20 language from beginning.
+This is a simplified and incomplete version of the [utfcpp](https://github.com/nemtrif/utfcpp) library. utfcpp was initially developed in 2006 when the current standard was C++03 and although I added some modern C++ features on top of it as an option, I wondered how the library would look like if I could start with C++20 language from beginning.
 
 Compared to utfcpp, utfcpp20:
 - Takes advantage of modern char/string types
