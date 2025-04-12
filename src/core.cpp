@@ -15,6 +15,9 @@
 #include "core.hpp"
 #include "utfcpp20.hpp"
 
+#include <bit>
+#include <cstdint>
+
 namespace utfcpp::internal
 {
     using u8_diff_type = std::u8string_view::difference_type;
@@ -110,11 +113,13 @@ namespace utfcpp::internal
 
     static constexpr u8_diff_type
     utf8_cp_length(char8_t lead_byte) {
-        if (lead_byte < 0x80)               return 1;
-        else if ((lead_byte >> 5) == 0x6)   return 2;
-        else if ((lead_byte >> 4) == 0xe)   return 3;
-        else if ((lead_byte >> 3) == 0x1e)  return 4;
-        else                                return 0; // invalid lead byte
+        switch (std::countl_one(uint8_t(lead_byte))) {
+            case 0: return 1;
+            case 2: return 2;
+            case 3: return 3;
+            case 4: return 4;
+            default: return 0; // invalid lead
+        }        
     }
 
     static constexpr size_t
