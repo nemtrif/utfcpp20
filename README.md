@@ -8,3 +8,7 @@ Compared to utfcpp, utfcpp20:
 - Offers a subset of the original functionality: there are no `is_valid` functions, iteration is simplified, error reporting is via exception only, etc.
 
 At this point the API is not stable. You are welcome to test it out but I would not recommend using it in production yet.
+
+## API Reference
+
+See [API_REFERENCE.md](API_REFERENCE.md) for a detailed description of the public API, exception classes, and iterator usage.
