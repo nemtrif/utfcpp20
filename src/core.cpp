@@ -226,24 +226,25 @@ namespace utfcpp::internal
 
     char32_t decode_next_utf16(std::u16string_view::iterator& it, std::u16string_view::iterator end_it) {
         if (it >= end_it)
-            throw internal_decoding_16_error("Incomplete seqence");
-        const char16_t first_word = static_cast<char16_t>(*it++);
+            throw internal_decoding_16_error("Incomplete sequence");
+        const char16_t first_word = static_cast<char16_t>(*it);
         if (!is_utf16_surrogate(first_word)) {
+            ++it;
             return first_word;
         } else {
-            if (it == end_it)
-                throw internal_decoding_16_error("Incomplete seqence");
-            else if (is_utf16_lead_surrogate(first_word)) {
-                const char16_t second_word = static_cast<char16_t>(*it++);
-                if (is_utf16_trail_surrogate(second_word)) {
-                    const char32_t code_point = static_cast<char32_t>(first_word << 10) + second_word + SURROGATE_OFFSET;
-                    return code_point;
-                } else {
-                    throw internal_decoding_16_error("Incomplete seqence");
-                }
-            } else {
+            if (!is_utf16_lead_surrogate(first_word))
                 throw internal_decoding_16_error("Invalid lead");
-            }
+            ++it;
+            if (it >= end_it)
+                throw internal_decoding_16_error("Incomplete sequence");
+            const char16_t second_word = static_cast<char16_t>(*it);
+            if (!is_utf16_trail_surrogate(second_word))
+                throw internal_decoding_16_error("Incomplete sequence");
+            ++it;
+            const char32_t code_point = (static_cast<char32_t>(first_word - LEAD_SURROGATE_MIN) << 10)
+                                      + (static_cast<char32_t>(second_word - TRAIL_SURROGATE_MIN))
+                                      + 0x10000;
+            return code_point;
         }
     }
 

@@ -32,8 +32,13 @@ namespace utfcpp {
         auto it{utf8_string.begin()}, end_it{utf8_string.end()};
         std::u16string ret16;
         ret16.reserve(internal::estimate16(utf8_string));
-        while (it != end_it)
-            append_to_utf16(ret16, internal::decode_next_utf8(it, end_it));
+        try {
+            while (it != end_it)
+                append_to_utf16(ret16, internal::decode_next_utf8(it, end_it));
+        } catch (const exception& e) {
+            size_t pos = static_cast<size_t>(std::distance(utf8_string.begin(), it));
+            throw exception_with_position(pos, e.what());
+        }
         return ret16;
     }
 
@@ -42,8 +47,13 @@ namespace utfcpp {
         std::u8string ret8;
         const size_t u8_length = internal::estimate8(utf16_string);
         ret8.reserve(u8_length);
-        while(it != end_it)
-            append_to_utf8(ret8, internal::decode_next_utf16(it, end_it));
+        try {
+            while(it != end_it)
+                append_to_utf8(ret8, internal::decode_next_utf16(it, end_it));
+        } catch (const exception& e) {
+            size_t pos = static_cast<size_t>(std::distance(utf16_string.begin(), it));
+            throw exception_with_position(pos, e.what());
+        }
         return ret8;
     }
 

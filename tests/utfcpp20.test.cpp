@@ -57,6 +57,34 @@ TEST(UtfTests, test_utf16_to_8)
     EXPECT_THROW(utfcpp::utf16_to_8(invalid_view), utfcpp::exception);
 }
 
+TEST(UtfTests, test_utf8_to_16_exception_position)
+{
+    // Invalid UTF-8: unexpected continuation byte at position 5
+    const char utf8_invalid[] = "\xe6\x97\xa5\xd1\x88\xfa";
+    std::u8string_view invalid_view(reinterpret_cast<const char8_t*>(utf8_invalid), strlen(utf8_invalid));
+    try {
+        utfcpp::utf8_to_16(invalid_view);
+        EXPECT_TRUE(false); // Expected exception_with_position
+    } catch (const utfcpp::exception& e) {
+        EXPECT_NE(e.position(), utfcpp::exception::npos);
+        EXPECT_EQ(e.position(), 5);
+    }
+}
+
+TEST(UtfTests, test_utf16_to_8_exception_position)
+{
+    // Invalid UTF-16: unexpected tail surrogate at position 3
+    const char16_t utf16_invalid[] = {0x41, 0x0448, 0x65e5, 0xdd1e};
+    std::u16string_view invalid_view(reinterpret_cast<const char16_t*>(utf16_invalid), 4);
+    try {
+        utfcpp::utf16_to_8(invalid_view);
+        EXPECT_TRUE(false); // Expected exception_with_position
+    } catch (const utfcpp::exception& e) {
+        EXPECT_NE(e.position(), utfcpp::exception::npos);
+        EXPECT_EQ(e.position(), 3);
+    }
+}
+
 TEST(u8_iteratorTests, test_iterator_construction)
 {
     const std::u8string_view empty_view{u8""};

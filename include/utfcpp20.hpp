@@ -41,6 +41,31 @@ namespace utfcpp {
          * The memory is owned by the exception object.
          */
         const char* what() const noexcept override;
+        /**
+         * \brief Returns the position in the string where the error occurred, or npos if not set.
+         *
+         * \return The position in the input string where the error was detected.
+         */
+        virtual size_t position() const noexcept { return npos; }
+        static constexpr size_t npos = static_cast<size_t>(-1);
+    };
+
+    /**
+     * \brief Exception class that includes the position of the error.
+     */
+    class exception_with_position : public exception {
+    public:
+        exception_with_position(size_t pos, std::string msg = "UTF error at position")
+            : position_(pos), message_(std::move(msg)) {}
+        size_t position() const noexcept override { return position_; }
+        const char* what() const noexcept override {
+            full_msg_ = message_ + " " + std::to_string(position_);
+            return full_msg_.c_str();
+        }
+    private:
+        size_t position_;
+        std::string message_;
+        mutable std::string full_msg_;
     };
 
     /**
